@@ -17,4 +17,12 @@ public class Expense extends EMModel {
 		updateViews();
 	}
 
+	public Money getValue() {
+		return value;
+	}
+
+	public void setValue(Money value) {
+		this.value = value;
+	}
+
 }

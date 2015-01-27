@@ -1,8 +1,13 @@
 package ca.ualberta.cs.expensemaster;
 
+import java.io.Serializable;
 import java.util.Currency;
+import java.util.Locale;
 
-public class Money {
+public class Money implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	private int denom_size = 100;
 	private int whole;
 	private int cents;
 	private Currency currency_type;
@@ -36,8 +41,8 @@ public class Money {
 		// Add cents portions
 		int cents = this.getCents() + m.getCents();
 		// Divmod. Carry goes to whole portions
-		int remainder = cents % 100;
-		int carry = cents / 100;
+		int remainder = cents % denom_size;
+		int carry = cents / denom_size;
 		int whole = this.getWhole() + m.getWhole();
 		
 		return new Money(currency_type, whole + carry, remainder);		
@@ -45,6 +50,10 @@ public class Money {
 
 	public Currency getCurrencyType() {
 		return currency_type;
+	}
+	
+	public String toString() {
+		return String.format(Locale.US, "%d.%02d", whole, cents);
 	}
 }
 
