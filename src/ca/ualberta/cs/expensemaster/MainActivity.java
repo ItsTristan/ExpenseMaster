@@ -15,12 +15,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Button newClaimButton = (Button) findViewById(R.id.add_claim_button);
-        newClaimButton.setOnClickListener(new OnClickListener() {
+		Button newClaim = (Button) findViewById(R.id.add_claim_button);
+        newClaim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 Toast.makeText(MainActivity.this,
-                        "goto EditClaimActivity", Toast.LENGTH_SHORT)
+                        "new_claim EditClaimActivity", Toast.LENGTH_SHORT)
                         .show();
             }
         });
