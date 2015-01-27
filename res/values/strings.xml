@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ExpenseMaster</string>
+    <string name="app_name">Expense Master</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="claims_menu_text">Claims</string>
+    
+    <string name="claims_header_text">Claims</string>
+    
+    <string name="add_claim_string">Create New Claim</string>
+    <string name="add_expense_string">Add Expense</string>
+    <string name="edit_claim_string">Edit Claim</string>
+    
+    <string name="claim_placeholder_string">&lt;Claim Name&gt;</string>
+    
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    
+    <string name="claim_name_prompt">Claim Name:</string>
+    <string name="claim_status_prompt">Status:</string>
+    <string name="claim_start_date_prompt">Start Date:</string>
+    <string name="claim_end_date_prompt">End Date:</string>
+    <string name="claim_date_prompt">Date:</string>
 
+    <string name="expense_name_prompt">Expense Name:</string>
+    <string name="expense_date_prompt">Date:</string>
+    <string name="expense_amount_prompt">Amount:</string>
+    <string name="expense_currency_type_prompt">Currency:</string>
+    
 </resources>

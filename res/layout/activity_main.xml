@@ -9,12 +9,31 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/claims_menu_text"
+        android:id="@+id/claims_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/claims_menu_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="@string/claims_header_text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ListView
+        android:id="@+id/claims_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/add_claim_button"
+        android:layout_below="@+id/claims_header"
+        android:layout_centerHorizontal="true" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/add_claim_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/add_claim_string" />
 
 </RelativeLayout>
