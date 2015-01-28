@@ -1,27 +1,42 @@
 package ca.ualberta.cs.expensemaster;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
-public class Claim extends EMModel {
+public class Claim extends EMModel implements SubTitleable {
 	private String name;
+	private ClaimStatus status;
+	private Date start_date;
+	private Date end_date;
 	private ArrayList<Expense> expenses;
 
-	public Claim(String name) {
-		this.setName(name);
+	public Claim(String name, ClaimStatus status,
+			Date start_date, Date end_date) {
+		this.name = name;
+		this.status = status;
+		this.start_date = start_date;
+		this.end_date = end_date;
 		expenses = new ArrayList<Expense>();
+		notifyViews();
+	}
+	
+	public Claim(String name) {
+		this(name, ClaimStatus.IN_PROGRESS, new Date(), null);
 	}
 	
 	public void addExpense(Expense e) {
 		if (! expenses.contains(e)) {
 			expenses.add(e);
-			updateViews();
+			notifyViews();
 		}
 	}
 	
 	public void deleteExpense(Expense e) {
 		if (expenses.contains(e)) {
 			expenses.remove(e);
-			updateViews();
+			notifyViews();
 		}
 	}
 
@@ -35,7 +50,68 @@ public class Claim extends EMModel {
 
 	public void setName(String name) {
 		this.name = name;
-		updateViews();
+		notifyViews();
+	}
+	
+	public String toString() {
+		return getName();
+	}
+
+	@Override
+	public String getTitle() {
+		return getName();
+	}
+
+	@Override
+	public String getSubTitle() {
+		SimpleDateFormat date_format = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
+		if (end_date == null) {
+			return getStatusString() + "\n" + date_format.format(start_date);
+		} else {
+			return getStatusString() + "\n" +
+				date_format.format(start_date) + " - " + date_format.format(end_date);
+		}
+	}
+
+	public ClaimStatus getStatus() {
+		return status;
+	}
+	
+	public String getStatusString() {
+		switch (status) {
+		case IN_PROGRESS:
+			return "In Progress";
+		case APPROVED:
+			return "Approved";
+		case RETURNED:
+			return "Returned";
+		case SUBMITTED:
+			return "Submitted";
+		}
+		return null;
+	}
+
+	public void setStatus(ClaimStatus status) {
+		this.status = status;
+		notifyViews();
+	}
+
+	public Date getStartDate() {
+		return start_date;
+	}
+
+	public void setStartDate(Date start_date) {
+		this.start_date = start_date;
+		notifyViews();
+	}
+
+	public Date getEndDate() {
+		return end_date;
+	}
+
+	public void setEndDate(Date end_date) {
+		this.end_date = end_date;
+		notifyViews();
 	}
 
 }

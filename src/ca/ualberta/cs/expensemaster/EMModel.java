@@ -9,7 +9,7 @@ public abstract class EMModel {
 		views = new ArrayList<EMView<EMModel>>();
 	}
 
-	public void updateViews() {
+	public void notifyViews() {
 		for (EMView<EMModel> view : views)
 			view.update(this);
 	}

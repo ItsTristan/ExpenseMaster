@@ -14,7 +14,7 @@ public class Expense extends EMModel {
 
 	public void setName(String name) {
 		this.name = name;
-		updateViews();
+		notifyViews();
 	}
 
 	public Money getValue() {
