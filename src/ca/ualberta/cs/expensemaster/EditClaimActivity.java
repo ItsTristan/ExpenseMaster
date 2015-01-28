@@ -14,7 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditClaimActivity extends Activity {
-	private Claim claim;
+	private transient Claim claim;
+	private transient int edit_position;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,9 +36,13 @@ public class EditClaimActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 
-		claim = getIntent().getParcelableExtra("claim");
-		if (claim == null) {
-			throw new RuntimeException("Did not receive a claim.");
+		edit_position = getIntent().getIntExtra("position", -1);
+		if (edit_position == -1) {
+			// Did not get a position to edit. Will create new claim.
+			claim = new Claim();
+		} else {
+			// Request was to edit existing claim
+			claim = ExpenseMasterApplication.getClaim(edit_position);
 		}
 
         EditText claim_name = (EditText) findViewById(R.id.claim_name_text);
