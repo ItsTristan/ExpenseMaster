@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Claim extends EMModel implements SubTitleable {
+	
 	private String name;
 	private ClaimStatus status;
 	private Date start_date;

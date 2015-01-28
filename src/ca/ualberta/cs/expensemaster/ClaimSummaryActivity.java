@@ -11,7 +11,7 @@ public class ClaimSummaryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_claim_summary);
 		
 		Button editClaim = (Button) findViewById(R.id.edit_claim_button);
         editClaim.setOnClickListener(new OnClickListener() {

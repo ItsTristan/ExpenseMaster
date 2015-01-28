@@ -1,21 +1,16 @@
 package ca.ualberta.cs.expensemaster;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-@SuppressWarnings("unused")
 public class MainActivity extends Activity {
 	private ClaimsList claims; 
 	
@@ -36,8 +31,15 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this,
                         "new_claim EditClaimActivity", Toast.LENGTH_SHORT)
                         .show();
+                // XXX startActivityForResult(intent, requestCode);
                 // TODO: Open Activity. Use result to add claims
-        		claims.addClaim(new Claim("Test"));
+                Claim new_claim = new Claim("sasdf");
+
+        		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
+        		startActivity(intent);
+        		
+        		claims.addClaim(new_claim);
+        		
         		adapter.notifyDataSetChanged();
             }
         });

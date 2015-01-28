@@ -1,6 +1,7 @@
 package ca.ualberta.cs.expensemaster;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +13,7 @@ public class EditClaimActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_edit_claim);
 		
 		Button addExpense = (Button) findViewById(R.id.add_expense_button);
         addExpense.setOnClickListener(new OnClickListener() {
@@ -31,6 +32,13 @@ public class EditClaimActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent resultIntent = new Intent();
+		setResult(Activity.RESULT_OK, resultIntent);
+		finish();
 	}
 
 }

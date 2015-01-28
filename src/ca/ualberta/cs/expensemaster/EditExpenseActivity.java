@@ -12,7 +12,7 @@ public class EditExpenseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_edit_expense);
 
 		Button save = (Button) findViewById(R.id.save_expense_button);
         save.setOnClickListener(new OnClickListener() {

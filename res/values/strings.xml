@@ -34,5 +34,8 @@
     <string name="expense_date_prompt">Date:</string>
     <string name="expense_amount_prompt">Amount:</string>
     <string name="expense_currency_type_prompt">Currency:</string>
+    <string name="app_edit_claim">Edit Claim</string>
+    <string name="app_claim_summary">Summary</string>
+    <string name="app_edit_expense">Edit Expense</string>
     
 </resources>
