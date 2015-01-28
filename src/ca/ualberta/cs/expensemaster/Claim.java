@@ -5,13 +5,55 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class Claim extends EMModel implements SubTitleable {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Claim extends EMModel implements SubTitleable, Parcelable {
 	
 	private String name;
 	private ClaimStatus status;
 	private Date start_date;
 	private Date end_date;
 	private ArrayList<Expense> expenses;
+	
+	// http://developer.android.com/reference/android/os/Parcelable.html
+	// Jan 27, 2015
+    public static final Parcelable.Creator<Claim> CREATOR
+	    = new Parcelable.Creator<Claim>() {
+		public Claim createFromParcel(Parcel in) {
+		    return new Claim(in);
+		}
+		
+		public Claim[] newArray(int size) {
+		    return new Claim[size];
+		}
+	};
+	
+	public Claim(Parcel in) {
+		this.name = in.readString();
+		this.status = (ClaimStatus) in.readSerializable();
+		this.start_date = new Date(in.readLong());
+		this.end_date = new Date(in.readLong());
+		
+		if (this.end_date.getTime() == 0) {
+			this.end_date = null;
+		}
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(name);
+		out.writeSerializable(status);
+		// http://stackoverflow.com/questions/21017404/reading-and-writing-java-util-date-from-parcelable-class
+		//  Jan 28, 2015
+		// Write dates as longs to improve performance
+		out.writeLong(start_date.getTime());
+		if (end_date == null) {
+			out.writeLong(0);
+		} else {
+			out.writeLong(end_date.getTime());
+		}
+	}
 
 	public Claim(String name, ClaimStatus status,
 			Date start_date, Date end_date) {
@@ -67,9 +109,9 @@ public class Claim extends EMModel implements SubTitleable {
 	public String getSubTitle() {
 		SimpleDateFormat date_format = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
 		if (end_date == null) {
-			return getStatusString() + "\n" + date_format.format(start_date);
+			return status + "\n" + date_format.format(start_date);
 		} else {
-			return getStatusString() + "\n" +
+			return status + "\n" +
 				date_format.format(start_date) + " - " + date_format.format(end_date);
 		}
 	}
@@ -78,19 +120,6 @@ public class Claim extends EMModel implements SubTitleable {
 		return status;
 	}
 	
-	public String getStatusString() {
-		switch (status) {
-		case IN_PROGRESS:
-			return "In Progress";
-		case APPROVED:
-			return "Approved";
-		case RETURNED:
-			return "Returned";
-		case SUBMITTED:
-			return "Submitted";
-		}
-		return null;
-	}
 
 	public void setStatus(ClaimStatus status) {
 		this.status = status;
@@ -113,6 +142,12 @@ public class Claim extends EMModel implements SubTitleable {
 	public void setEndDate(Date end_date) {
 		this.end_date = end_date;
 		notifyViews();
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

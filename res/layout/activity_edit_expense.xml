@@ -76,19 +76,12 @@
         android:layout_below="@+id/expense_currency_type_prompt" />
 
     <Button
-        android:id="@+id/save_expense_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/cancel_expense_button"
-        android:text="@+string/save" />
-
-    <Button
-        android:id="@+id/cancel_expense_button"
+        android:id="@+id/save_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:text="@+string/cancel" />
+        android:text="@+string/save" />
+
 
 </RelativeLayout>

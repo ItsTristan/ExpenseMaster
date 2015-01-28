@@ -18,6 +18,8 @@ public class ClaimsList extends EMModel {
 			claims.add(c);
 			// http://stackoverflow.com/questions/7916834/android-adding-listview-sub-item-text
 			//  Jan 27, 2015
+			
+			// FIXME: Need to watch if c changes
 			Map<String, String> datum = new HashMap<String, String>(2);
 		    datum.put("title", c.getTitle());
 		    datum.put("subtitle", c.getSubTitle());
@@ -29,6 +31,14 @@ public class ClaimsList extends EMModel {
 
 	public void deleteClaim(Claim c) {
 		if (! claims.contains(c)) {
+
+			Map<String, String> datum = new HashMap<String, String>(2);
+		    datum.put("title", c.getTitle());
+		    datum.put("subtitle", c.getSubTitle());
+		    
+		    // FIXME: datum may not be the same as c requested
+		    list_data.remove(datum);
+		    
 			claims.remove(c);
 			notifyViews();
 		}

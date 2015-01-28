@@ -35,14 +35,17 @@
         android:text="@+string/claim_start_date_prompt"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
-    <EditText
+    <TextView
         android:id="@+id/claim_start_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/claim_start_date_prompt"
-        android:ems="10"
-        android:inputType="date" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textSize="16sp" />
 
+    
     <TextView
         android:id="@+id/claim_end_date_prompt"
         android:layout_width="wrap_content"
@@ -51,13 +54,15 @@
         android:text="@+string/claim_end_date_prompt"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
-    <EditText
+    <TextView
         android:id="@+id/claim_end_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_below="@+id/claim_end_date_prompt"
-        android:inputType="date" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textSize="16sp" />
 
     <ListView
         android:id="@+id/expense_list"
@@ -71,8 +76,16 @@
         android:id="@+id/add_expense_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/save_button"
         android:layout_centerHorizontal="true"
         android:text="@+string/add_expense_string" />
+    
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@+string/save" />
 
 </RelativeLayout>
