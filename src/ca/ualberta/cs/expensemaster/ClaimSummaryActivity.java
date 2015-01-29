@@ -90,7 +90,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		// Associate spinner with claim status enum
 		spinner_adapter = new ArrayAdapter<ClaimStatus>(this, android.R.layout.simple_spinner_item, ClaimStatus.values());
 		spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		claim_status.setAdapter(adapter);
+		claim_status.setAdapter(spinner_adapter);
 		
 		// Adapter updates to match money summary.
 		adapter = new ArrayAdapter<Money>(this, R.layout.list_item, 
