@@ -1,6 +1,8 @@
 package ca.ualberta.cs.expensemaster;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -10,7 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditClaimActivity extends Activity {
@@ -18,8 +19,8 @@ public class EditClaimActivity extends Activity {
 	private transient int edit_position;
 
     EditText claim_name;
-    TextView claim_start_date;
-    TextView claim_end_date;
+    EditText claim_start_date;
+    EditText claim_end_date;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +39,51 @@ public class EditClaimActivity extends Activity {
         
 		Button save = (Button) findViewById(R.id.save_button);
         save.setOnClickListener(new OnClickListener() {
-            @Override
+			@Override
             public void onClick(View arg0) {
         		Intent resultIntent = new Intent();
         		resultIntent.putExtra("position", edit_position);
         		
         		setResult(Activity.RESULT_OK, resultIntent);
         		
-        		claim.setName(claim_name.getText().toString().trim());
+
+        		SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
+
+        		String name = claim_name.getText().toString().trim();
+        		Date startDate;
+        		Date endDate;
+        		// Try to convert start date to a real date
+        		try {
+					startDate = df.parse(claim_start_date.getText().toString());
+				} catch (ParseException e) {
+					// Stop on exception
+					Toast.makeText(EditClaimActivity.this, 
+							"Start date must be in format yyyy/mm/dd",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+        		// Try to convert end date to real date, if data entered
+        		try {
+        			String end_date = claim_end_date.getText().toString();
+        			if (end_date == null || end_date.isEmpty()) {
+        				endDate = null;
+        			} else {
+        				endDate = df.parse(claim_end_date.getText().toString());
+        			}
+				} catch (ParseException e) {
+					// Stop on exception
+					Toast.makeText(EditClaimActivity.this, 
+							"End date must be in format yyyy/mm/dd or blank",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+        		
+        		// If we make it here, all things passed safely.
+        		// Update the claim now.
+        		claim.setName(name);
+        		claim.setStartDate(startDate);
+        		claim.setEndDate(endDate);
+        		
         		// Require name must be filled.
         		if (claim.getName() == null || claim.getName().isEmpty()) {
     				Toast.makeText(EditClaimActivity.this,
@@ -90,8 +128,8 @@ public class EditClaimActivity extends Activity {
 		}
 
         claim_name = (EditText) findViewById(R.id.claim_name_text);
-        claim_start_date = (TextView) findViewById(R.id.claim_start_date);
-        claim_end_date = (TextView) findViewById(R.id.claim_end_date);
+        claim_start_date = (EditText) findViewById(R.id.claim_start_date);
+        claim_end_date = (EditText) findViewById(R.id.claim_end_date);
         
         claim_name.setText(claim.getName());
 		SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);

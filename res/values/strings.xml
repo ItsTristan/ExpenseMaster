@@ -37,5 +37,11 @@
     <string name="app_edit_claim">Edit Claim</string>
     <string name="app_claim_summary">Summary</string>
     <string name="app_edit_expense">Edit Expense</string>
+    <string name="email_claim_string">Email Claim</string>
+    
+    <string name="status_in_progress">In Progress</string>
+    <string name="status_submitted">Submitted</string>
+    <string name="status_returned">Returned</string>
+    <string name="status_approved">Approved</string>
     
 </resources>

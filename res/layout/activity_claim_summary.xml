@@ -18,39 +18,46 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <TextView
-        android:id="@+id/claim_status_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_below="@+id/claim_name_text"
-        android:text="@string/claim_status_prompt"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <TextView
         android:id="@+id/claim_date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_below="@+id/claim_status_text"
+        android:layout_below="@+id/claim_name_text"
         android:text="@string/claim_date_prompt"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <Spinner
+        android:id="@+id/status_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/claim_date_text" />
+    
     
     <ListView
         android:id="@+id/expense_summary_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/claim_date_text"
-        android:layout_above="@+id/edit_claim_button" >
+        android:layout_below="@+id/status_spinner"
+        android:layout_above="@+id/email_claim" >
     </ListView>
+    
+    <Button 
+        android:id="@+id/email_claim"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/edit_claim_button"
+        android:text="@string/email_claim_string" >
+    </Button>
     
     <Button 
         android:id="@+id/edit_claim_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@+string/edit_claim_string" >
+        android:text="@string/edit_claim_string" >
     </Button>
+
 
 </RelativeLayout>
