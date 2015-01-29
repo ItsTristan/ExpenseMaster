@@ -18,7 +18,7 @@ public class ExpenseMasterApplication extends Application {
 		return claims;
 	}
 
-	public void addClaim(Claim c) {
+	public static void addClaim(Claim c) {
 		if (! claims.contains(c)) {
 			claims.add(c);
 			Collections.sort(claims);
@@ -27,13 +27,13 @@ public class ExpenseMasterApplication extends Application {
 	}
 
 	public void deleteClaim(Claim c) {
-		if (! claims.contains(c)) {
+		if (claims.contains(c)) {
 			claims.remove(c);
 			saveClaims();
 		}
 	}
 
-	public void updateClaim(int index, Claim c) {
+	public static void updateClaim(int index, Claim c) {
 		claims.set(index, c);
 		saveClaims();
 	}

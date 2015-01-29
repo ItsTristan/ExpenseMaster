@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
 	
 	private static final int REQUEST_NEW_CLAIM = 1;
 	private static final int REQUEST_EDIT_CLAIM = 2;
+	private static final int REQUEST_CLAIM_SUMMARY = 3;
 	
 	private ArrayAdapter<Claim> adapter;
 	
@@ -28,7 +29,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        claims = ExpenseMasterApplication.getClaims();
 		
+		// == Add Claim Button ==
 		Button newClaim = (Button) findViewById(R.id.add_claim_button);
         newClaim.setOnClickListener(new OnClickListener() {
             @Override
@@ -36,7 +39,6 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this,
                         "new_claim EditClaimActivity", Toast.LENGTH_SHORT)
                         .show();
-                // TODO: Pass new claim through messenger
 
         		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
                 // Pass claim through activity as parcel
@@ -45,8 +47,7 @@ public class MainActivity extends Activity {
             }
         });
         
-        claims = ExpenseMasterApplication.getClaims();
-        
+        // == Claims List View ==
         ListView claims_list = (ListView) findViewById(R.id.claims_list_view);
         claims_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
         });
         
 		adapter = new ArrayAdapter<Claim>(this, R.layout.claims_list_item, 
-				ExpenseMasterApplication.getClaims());
+				claims);
 
 		// XXX: claims_list is unsorted.
         claims_list.setAdapter(adapter);
@@ -88,22 +89,34 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int request_code, int result_code, Intent data) {
 		if (result_code == RESULT_OK) {
+			// Do things if result OK
 			switch (request_code) {
 			case REQUEST_NEW_CLAIM:
-		        Claim new_claim = new Claim("sasdf");
-				claims.add(new_claim);
-				// Fall through
+	    		break;
 			case REQUEST_EDIT_CLAIM:
-	    		adapter.notifyDataSetChanged();
 				break;
 				
 				
 			default:
 				throw new RuntimeException("Unknown request code");
 			}
-		} else {
-			Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
+		} else if (result_code == RESULT_CANCELED) {
+			switch (request_code) {
+			case REQUEST_EDIT_CLAIM:
+			case REQUEST_NEW_CLAIM:
+				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
+				break;
+			case REQUEST_CLAIM_SUMMARY:
+				break;
+			}
 		}
+		
+		updateDisplay();
+	}
+	
+	private void updateDisplay() {
+//		this.claims = ExpenseMasterApplication.getClaims();
+		adapter.notifyDataSetChanged();
 	}
 	
 	protected void onStart() {
