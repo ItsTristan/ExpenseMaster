@@ -26,11 +26,16 @@ public class ExpenseMasterApplication extends Application {
 		}
 	}
 
-	public void deleteClaim(Claim c) {
-		if (claims.contains(c)) {
-			claims.remove(c);
-			saveClaims();
-		}
+	public static void deleteClaim(Claim c) {
+		assert(claims.contains(c));
+		claims.remove(c);
+		saveClaims();
+	}
+
+	public static void deleteClaim(int index) {
+		assert (0 <= index && index < claims.size());
+		claims.remove(index);
+		saveClaims();
 	}
 
 	public static void updateClaim(int index, Claim c) {

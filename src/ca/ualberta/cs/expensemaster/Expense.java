@@ -4,8 +4,9 @@ public class Expense extends EMModel {
 	private String name;
 	private Money value;
 
-	public Expense(String name) {
+	public Expense(String name, Money value) {
 		this.setName(name);
+		this.setValue(value);
 	}
 
 	public String getName() {
@@ -23,6 +24,7 @@ public class Expense extends EMModel {
 
 	public void setValue(Money value) {
 		this.value = value;
+		notifyViews();
 	}
 
 }

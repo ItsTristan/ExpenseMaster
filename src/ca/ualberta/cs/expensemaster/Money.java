@@ -53,7 +53,7 @@ public class Money implements Serializable {
 	}
 	
 	public String toString() {
-		return String.format(Locale.US, "%d.%02d", whole, cents);
+		return String.format(Locale.US, "%d.%02d %s", whole, cents, currency_type.toString());
 	}
 }
 

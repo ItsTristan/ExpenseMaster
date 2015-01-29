@@ -2,10 +2,13 @@ package ca.ualberta.cs.expensemaster;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-public class Claim extends EMModel implements SubTitleable, Comparable<Claim> {
+public class Claim extends EMModel implements Comparable<Claim> {
 	
 	private String name;
 	private ClaimStatus status;
@@ -61,20 +64,14 @@ public class Claim extends EMModel implements SubTitleable, Comparable<Claim> {
 	public String toString() {
 		return getName();
 	}
-
-	@Override
-	public String getTitle() {
-		return getName();
-	}
-
-	@Override
-	public String getSubTitle() {
+	
+	public String getDateString() {
+		// Make sure date formatting is consistent
 		SimpleDateFormat date_format = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
 		if (end_date == null) {
-			return status + "\n" + date_format.format(start_date);
+			return date_format.format(start_date);
 		} else {
-			return status + "\n" +
-				date_format.format(start_date) + " - " + date_format.format(end_date);
+			return 	date_format.format(start_date) + " - " + date_format.format(end_date);
 		}
 	}
 
@@ -110,4 +107,30 @@ public class Claim extends EMModel implements SubTitleable, Comparable<Claim> {
 	public int compareTo(Claim another) {
 		return this.getStartDate().compareTo(another.getStartDate());
 	}
+	
+	// FIXME Does not work
+	public ArrayList<Money> getExpenseSummary() {
+		ArrayList<Money> results = new ArrayList<Money>();
+		Map<Currency, Money> sums = new HashMap<Currency, Money>();
+		// Iterate over own expenses and sum.
+		for (Expense e : expenses) {
+			Money value = e.getValue();
+			Currency key = value.getCurrencyType();
+			// Add Moneys.
+			if (sums.containsKey(key)) {
+				sums.put(key, value.add(sums.get(key)));
+			} else {
+				sums.put(key, value);
+			}
+		}
+		
+		for (Currency key : sums.keySet()) {
+			results.add(sums.get(key));
+		}
+		
+		return results;
+	}
 }
+
+
+

@@ -1,7 +1,7 @@
 package ca.ualberta.cs.expensemaster;
 
-public interface EMView<M extends EMModel> {
+public interface EMView {
 	
-	void update(M model);
+	void update(EMModel model);
 	
 }

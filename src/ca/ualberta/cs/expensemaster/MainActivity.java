@@ -1,8 +1,8 @@
 package ca.ualberta.cs.expensemaster;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -17,32 +18,22 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	private static final int REQUEST_NEW_CLAIM = 1;
-	private static final int REQUEST_EDIT_CLAIM = 2;
-	private static final int REQUEST_CLAIM_SUMMARY = 3;
-	
 	private ArrayAdapter<Claim> adapter;
 	
-	private ArrayList<Claim> claims;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-        claims = ExpenseMasterApplication.getClaims();
 		
 		// == Add Claim Button ==
 		Button newClaim = (Button) findViewById(R.id.add_claim_button);
         newClaim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(MainActivity.this,
-                        "new_claim EditClaimActivity", Toast.LENGTH_SHORT)
-                        .show();
-
         		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
                 // Pass claim through activity as parcel
-        		startActivityForResult(intent, REQUEST_NEW_CLAIM);
+        		startActivityForResult(intent, RequestCode.REQUEST_NEW_CLAIM);
         		
             }
         });
@@ -54,22 +45,53 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				// XXX This should go to the Claim Summary page
-        		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
+				// On tap, open claim summary
+        		Intent intent = new Intent(MainActivity.this, ClaimSummaryActivity.class);
         		
-                // Pass list index through activity as parcel
+                // Pass list index through intent
         		intent.putExtra("position", position);
-        		
-        		startActivityForResult(intent, REQUEST_EDIT_CLAIM);
+
+        		// Activity is responsible for the update
+        		startActivityForResult(intent, RequestCode.REQUEST_CLAIM_SUMMARY);
+			}
+        });
+
+        claims_list.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					final int position, long id) {
+				// On long click, delete
+				// http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+				//  Creates the alert dialog and immediately discards after displaying
 				
-				Toast.makeText(MainActivity.this,
-					      position + ": " + claims.get(position), Toast.LENGTH_LONG)
-					      .show();
+				// position is set to final so that the delegate doesn't
+				// complain about position changing in the outer body.
+				new AlertDialog.Builder(MainActivity.this)
+			    	.setTitle("Delete entry")
+			    	.setMessage("Are you sure you want to delete this entry?")
+			    	.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+			    		public void onClick(DialogInterface dialog, int which) { 
+				    		// Delete claim
+			            	ExpenseMasterApplication.deleteClaim(position);
+							updateDisplay();
+			    		}
+			    	})
+			    	.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+			    		public void onClick(DialogInterface dialog, int which) { 
+			    			// do nothing
+			    		}
+			    	})
+			    	.setIcon(android.R.drawable.ic_dialog_alert)
+			    	.show();
+				
+				// Consume the long click
+				return true;
 			}
         });
         
-		adapter = new ArrayAdapter<Claim>(this, R.layout.claims_list_item, 
-				claims);
+        
+		adapter = new ArrayAdapter<Claim>(this, R.layout.list_item, 
+				ExpenseMasterApplication.getClaims());
 
 		// XXX: claims_list is unsorted.
         claims_list.setAdapter(adapter);
@@ -91,9 +113,9 @@ public class MainActivity extends Activity {
 		if (result_code == RESULT_OK) {
 			// Do things if result OK
 			switch (request_code) {
-			case REQUEST_NEW_CLAIM:
+			case RequestCode.REQUEST_NEW_CLAIM:
 	    		break;
-			case REQUEST_EDIT_CLAIM:
+			case RequestCode.REQUEST_EDIT_CLAIM:
 				break;
 				
 				
@@ -102,11 +124,11 @@ public class MainActivity extends Activity {
 			}
 		} else if (result_code == RESULT_CANCELED) {
 			switch (request_code) {
-			case REQUEST_EDIT_CLAIM:
-			case REQUEST_NEW_CLAIM:
+			case RequestCode.REQUEST_EDIT_CLAIM:
+			case RequestCode.REQUEST_NEW_CLAIM:
 				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
 				break;
-			case REQUEST_CLAIM_SUMMARY:
+			case RequestCode.REQUEST_CLAIM_SUMMARY:
 				break;
 			}
 		}
