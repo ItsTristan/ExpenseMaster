@@ -41,10 +41,19 @@ Currency
 Persistence
 - [X] Data is persistent between states
 - [X] Data is not lost when exiting the program
+  * Data is saved every time the Save button is pressed
+  * How to handle saving of Expenses?
+    * If we save every time Expenses>Save is pressed, then the user can't cancel from the Edit Claims view.
+    * If we don't handle it this way, data may be lost if the app is closed while editing a claim, even if the expense was saved.
+      * This is practical if every usage is a full session, but it's unrealistic.
 
 Consistency
 - [ ] App assists consistent data entry
-  * android:hint ?
+  * Add android:hint to fields
+  * Date parsing through SimpleDateFormat is weak at best.
+    * Allows dates such as 123/45/67 to be entered validly.
+    * Might need a stronger format than yyyy/mm/dd.
+      * Date may need a stronger format for de/serialization
 
 Completeness
 ============
@@ -75,7 +84,9 @@ Submission
 Important
 =========
 - [ ] Only 1 APK appears in the bin directory
-- [ ] Application displays as ccid-notes
+- [X] Application displays as ccid-notes
 - [ ] Contains a README file
+  * Should describe intent of program
+  * Should mention external libraries used
 - [ ] UML is in the doc directory
-- [ ] SQLite is not used
+- [X] SQLite is not used
