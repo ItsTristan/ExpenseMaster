@@ -3,8 +3,8 @@ Requirements
 Expenses
 - [ ] add individual expense items
   * Adding and removing will be similar to claims.
-  * Saving the changes requires calling updateClaim
 - [ ] edit individual expense items
+  * Saving the changes requires calling updateClaim
 - [ ] delete individual expense items
 
 Claims
@@ -14,7 +14,7 @@ Claims
 
 Emails
 - [ ] email a selected claim and its constituent expense items
-  * Might need to factor out the methods for Json to general things
+  * Might need to factor out the methods for Json to more general things
     * Interface ClaimExportable
     * Class HTMLExporter implements ClaimExportable
     * Class JsonExporter implements ClaimExportable
@@ -83,7 +83,7 @@ Submission
 
 Important
 =========
-- [ ] Only 1 APK appears in the bin directory
+- [ ] Only 1 APK appears in the /bin/ directory
 - [X] Application displays as ccid-notes
 - [ ] Contains a README file
   * Should describe intent of program
