@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Expense Master</string>
+    <string name="app_name">tmeleshk-notes</string>
     
     <!-- Menu (main) -->
     <string name="action_settings">Settings</string>
     <string name="action_add_claim">New Claim</string>
     
-    <!-- Header texts -->
+    <!-- Head texts -->
+    <string name="app_title">Expense Master</string>
     <string name="claims_header_text">Claims</string>
     
     <!-- Claims actions -->

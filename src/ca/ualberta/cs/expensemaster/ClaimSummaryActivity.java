@@ -24,6 +24,9 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	private TextView claim_date;
 	private Spinner claim_status;
 	private ListView expenses_summary;
+	private Button edit_claim;
+	
+	private boolean isFirstSelection;
 	
 	private ArrayAdapter<Money> adapter;
 	private ArrayAdapter<ClaimStatus> spinner_adapter;
@@ -34,9 +37,15 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_claim_summary);
-		
-		Button editClaim = (Button) findViewById(R.id.edit_claim_button);
-        editClaim.setOnClickListener(new OnClickListener() {
+        
+		claim_name = (TextView) findViewById(R.id.claim_name_text);
+		claim_date = (TextView) findViewById(R.id.claim_date_text);
+		expenses_summary = (ListView) findViewById(R.id.expense_summary_list);
+
+		// Flag for skipping saves on spinner initialization
+		isFirstSelection = true;
+		edit_claim = (Button) findViewById(R.id.edit_claim_button);
+        edit_claim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 Toast.makeText(ClaimSummaryActivity.this,
@@ -53,28 +62,34 @@ public class ClaimSummaryActivity extends Activity implements EMView {
         		startActivityForResult(intent, RequestCode.REQUEST_EDIT_CLAIM);
             }
         });
-        
-
-		claim_name = (TextView) findViewById(R.id.claim_name_text);
-		claim_date = (TextView) findViewById(R.id.claim_date_text);
-		expenses_summary = (ListView) findViewById(R.id.expense_summary_list);
 
 		claim_status = (Spinner) findViewById(R.id.status_spinner);
 		claim_status.setOnItemSelectedListener(new OnItemSelectedListener() { 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				// Don't do work if we aren't done initializing the Activity yet.
+				// (first selection is always the default selector)
+				if (isFirstSelection) {
+					isFirstSelection = false;
+					return;
+				}
+				
+				// Fetch status value from view
 			    ClaimStatus status = (ClaimStatus) parent.getItemAtPosition(pos);
-			
-                Toast.makeText(ClaimSummaryActivity.this,
-                        status.toString(), Toast.LENGTH_SHORT)
-                        .show();
+			    
+			    // Save status immediately
+			    claim.setStatus(status);
+
+			    // Change views on this page to enable/disable as necessary.
+			    updateStatusViews();
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
+			public void onNothingSelected(AdapterView<?> parent) {
+				// Shouldn't happen
+				throw new RuntimeException("Spinner selected nothing");
 			}
+
 		});
         
 	}
@@ -85,7 +100,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		position = getIntent().getIntExtra("position", -2);
 		claim = ExpenseMasterApplication.getClaim(position);
         claim.addView(this);
-        expense_summary = claim.getExpenseSummary();;
+        expense_summary = claim.getExpenseSummary();
 		
 		// Associate spinner with claim status enum
 		spinner_adapter = new ArrayAdapter<ClaimStatus>(this, android.R.layout.simple_spinner_item, ClaimStatus.values());
@@ -97,9 +112,9 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 				expense_summary);
 		expenses_summary.setAdapter(adapter);
 		
-		
 		updateTextViews();
 		updateSummaryList();
+		updateStatusViews();
 	}
 
 	@Override
@@ -122,7 +137,6 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	private void updateTextViews() {
 		// Update TextViews
 		claim_name.setText(claim.getName());
-//		claim_status.setText(claim.getStatus().toString());
 		claim_date.setText(claim.getDateString());
 	}
 	
@@ -130,6 +144,16 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		// Update summary array first
 		expense_summary = claim.getExpenseSummary();
 		adapter.notifyDataSetChanged();
+	}
+	
+	private void updateStatusViews() {
+		// Match spinner status to current status
+		claim_status.setSelection(
+				spinner_adapter.getPosition(claim.getStatus()));
+		// Update buttons to match the status
+		edit_claim.setEnabled(claim.getStatus() == ClaimStatus.IN_PROGRESS ||
+							claim.getStatus() == ClaimStatus.RETURNED);
+		spinner_adapter.notifyDataSetChanged();
 	}
 
 }

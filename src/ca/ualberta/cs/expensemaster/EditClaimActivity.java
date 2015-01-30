@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class EditClaimActivity extends Activity {
-	private transient Claim claim;
-	private transient int edit_position;
+	private Claim claim;
+	private int edit_position;
 
     EditText claim_name;
     EditText claim_start_date;
