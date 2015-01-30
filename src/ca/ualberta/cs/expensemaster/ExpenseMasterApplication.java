@@ -27,7 +27,7 @@ public class ExpenseMasterApplication extends Application {
 	
 	// This date format is to be consistent across all dates 
 	public static final SimpleDateFormat global_date_format =
-			new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
+			new SimpleDateFormat("yyyy/MM/dd", Locale.CANADA);
 	
 	public static ArrayList<Claim> getClaims(Context ctx) {
 		if (claims == null) {
