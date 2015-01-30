@@ -9,6 +9,7 @@ public enum ClaimStatus {
 	APPROVED(R.string.status_approved);
 
 	private String text;
+	private int serialID;
 	private int resId;
 	
 	static {
@@ -16,6 +17,12 @@ public enum ClaimStatus {
 		SUBMITTED.text = "Submitted";
 		RETURNED.text = "Returned";
 		APPROVED.text = "Approved";
+		
+		// Used to read and write into serial streams
+		IN_PROGRESS.serialID = 0;
+		SUBMITTED.serialID = 1;
+		RETURNED.serialID = 2;
+		APPROVED.serialID = 3;
 	}
 	
 	ClaimStatus(int resId) {
@@ -42,5 +49,9 @@ public enum ClaimStatus {
 	 */
 	public int getResId() {
 		return resId;
+	}
+
+	public int getSerialID() {
+		return serialID;
 	}
 }

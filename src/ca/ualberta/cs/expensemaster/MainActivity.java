@@ -19,7 +19,6 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private ArrayAdapter<Claim> adapter;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class MainActivity extends Activity {
 			    	.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 			    		public void onClick(DialogInterface dialog, int which) { 
 				    		// Delete claim
-			            	ExpenseMasterApplication.deleteClaim(position);
+			            	ExpenseMasterApplication.deleteClaim(MainActivity.this, position);
 							updateDisplay();
 			    		}
 			    	})
@@ -91,7 +90,7 @@ public class MainActivity extends Activity {
         
         
 		adapter = new ArrayAdapter<Claim>(this, R.layout.list_item, 
-				ExpenseMasterApplication.getClaims());
+				ExpenseMasterApplication.getClaims(MainActivity.this));
 
 		// XXX: claims_list is unsorted.
         claims_list.setAdapter(adapter);

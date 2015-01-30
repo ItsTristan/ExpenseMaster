@@ -79,6 +79,9 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 			    
 			    // Save status immediately
 			    claim.setStatus(status);
+			    // Inform Application that the update occurred so it can be saved.
+			    ExpenseMasterApplication.updateClaim(ClaimSummaryActivity.this,
+			    		position, claim);
 
 			    // Change views on this page to enable/disable as necessary.
 			    updateStatusViews();

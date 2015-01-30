@@ -3,7 +3,6 @@ package ca.ualberta.cs.expensemaster;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,7 +46,7 @@ public class EditClaimActivity extends Activity {
         		setResult(Activity.RESULT_OK, resultIntent);
         		
 
-        		SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
+        		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
 
         		String name = claim_name.getText().toString().trim();
         		Date startDate;
@@ -100,12 +99,12 @@ public class EditClaimActivity extends Activity {
 	        		if (edit_position == -1) {
 	    				Toast.makeText(EditClaimActivity.this, "Adding claim",
 	    						Toast.LENGTH_SHORT).show();
-	        			ExpenseMasterApplication.addClaim(claim);
+	        			ExpenseMasterApplication.addClaim(EditClaimActivity.this, claim);
 	        		// If saving an old, update entry and return.
 	        		} else {
 	    				Toast.makeText(EditClaimActivity.this, "Updating claim " +
 	    						edit_position, Toast.LENGTH_SHORT).show();
-	        			ExpenseMasterApplication.updateClaim(edit_position, claim);
+	        			ExpenseMasterApplication.updateClaim(EditClaimActivity.this, edit_position, claim);
 	        		}
 	        		
 	        		finish();
@@ -132,7 +131,8 @@ public class EditClaimActivity extends Activity {
         claim_end_date = (EditText) findViewById(R.id.claim_end_date);
         
         claim_name.setText(claim.getName());
-		SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		
         claim_start_date.setText(df.format(claim.getStartDate()));   
         if (claim.getEndDate() == null) {
         	claim_end_date.setText("");

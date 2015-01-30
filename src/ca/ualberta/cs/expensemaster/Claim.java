@@ -1,11 +1,9 @@
 package ca.ualberta.cs.expensemaster;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class Claim extends EMModel implements Comparable<Claim> {
@@ -66,12 +64,11 @@ public class Claim extends EMModel implements Comparable<Claim> {
 	}
 	
 	public String getDateString() {
-		// Make sure date formatting is consistent
-		SimpleDateFormat date_format = new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
 		if (end_date == null) {
-			return date_format.format(start_date);
+			return ExpenseMasterApplication.global_date_format.format(start_date);
 		} else {
-			return 	date_format.format(start_date) + " - " + date_format.format(end_date);
+			return ExpenseMasterApplication.global_date_format.format(start_date) 
+					+ " - " + ExpenseMasterApplication.global_date_format.format(end_date);
 		}
 	}
 
@@ -129,6 +126,10 @@ public class Claim extends EMModel implements Comparable<Claim> {
 		}
 		
 		return results;
+	}
+	
+	public int getExpenseCount() {
+		return expenses.size();
 	}
 }
 
