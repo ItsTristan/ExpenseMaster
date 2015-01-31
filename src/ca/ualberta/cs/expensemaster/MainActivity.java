@@ -19,14 +19,17 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private ArrayAdapter<Claim> adapter;
-
+	private ListView claims_list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Button newClaim;
+		
 		setContentView(R.layout.activity_main);
 		
 		// == Add Claim Button ==
-		Button newClaim = (Button) findViewById(R.id.add_claim_button);
+		newClaim = (Button) findViewById(R.id.add_claim_button);
         newClaim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -38,7 +41,7 @@ public class MainActivity extends Activity {
         });
         
         // == Claims List View ==
-        ListView claims_list = (ListView) findViewById(R.id.claims_list_view);
+        claims_list = (ListView) findViewById(R.id.claims_list_view);
         claims_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -88,17 +91,18 @@ public class MainActivity extends Activity {
 			}
         });
         
-        
 		adapter = new ArrayAdapter<Claim>(this, R.layout.list_item, 
-				ExpenseMasterApplication.getClaims(MainActivity.this));
+				ExpenseMasterApplication.getClaims(this));
+		
+        if (adapter == null) {
+        	throw new RuntimeException("claims list not initialized");
+        }
 
 		// XXX: claims_list is unsorted.
         claims_list.setAdapter(adapter);
         
-        // On list view tap, goto ClaimSummaryActivity[index]
-        // On list view hold tap, alert delete?
-        
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,18 +136,15 @@ public class MainActivity extends Activity {
 				break;
 			}
 		}
-		
-		updateDisplay();
 	}
 	
 	private void updateDisplay() {
-//		this.claims = ExpenseMasterApplication.getClaims();
 		adapter.notifyDataSetChanged();
 	}
 	
 	protected void onStart() {
 		super.onStart();
-		// TODO try read. If fail, set new.
+		updateDisplay();
         
 	}
 }

@@ -41,6 +41,7 @@
         android:ems="10"
         android:layout_below="@+id/claim_start_date_prompt"
         android:inputType="date"
+        android:hint="@string/date_hint"
         android:textSize="16sp" />
 
     
@@ -58,6 +59,7 @@
         android:ems="10"
         android:layout_below="@+id/claim_end_date_prompt"
         android:inputType="date"
+        android:hint="@string/date_hint"
         android:textSize="16sp" />
 
     <ListView

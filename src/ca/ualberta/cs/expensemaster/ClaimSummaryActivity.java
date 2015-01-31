@@ -42,6 +42,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		claim_date = (TextView) findViewById(R.id.claim_date_text);
 		expenses_summary = (ListView) findViewById(R.id.expense_summary_list);
 
+		// == Edit Claim ==
 		// Flag for skipping saves on spinner initialization
 		isFirstSelection = true;
 		edit_claim = (Button) findViewById(R.id.edit_claim_button);
@@ -63,6 +64,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
             }
         });
 
+        // == Status Spinner ==
 		claim_status = (Spinner) findViewById(R.id.status_spinner);
 		claim_status.setOnItemSelectedListener(new OnItemSelectedListener() { 
 			@Override
@@ -101,6 +103,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	protected void onStart() {
 		super.onStart();
 		position = getIntent().getIntExtra("position", -2);
+		// Throws a runtime error if position is invalid.
 		claim = ExpenseMasterApplication.getClaim(position);
         claim.addView(this);
         expense_summary = claim.getExpenseSummary();

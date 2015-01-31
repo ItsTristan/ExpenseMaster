@@ -27,7 +27,7 @@ public class ExpenseMasterApplication extends Application {
 	
 	// This date format is to be consistent across all dates 
 	public static final SimpleDateFormat global_date_format =
-			new SimpleDateFormat("yyyy/mm/dd", Locale.CANADA);
+			new SimpleDateFormat("yyyy/MM/dd", Locale.CANADA);
 	
 	public static ArrayList<Claim> getClaims(Context ctx) {
 		if (claims == null) {
@@ -53,9 +53,7 @@ public class ExpenseMasterApplication extends Application {
 	}
 
 	public static void deleteClaim(Context ctx, int index) {
-		if (BuildConfig.DEBUG & 0 <= index && index < claims.size()) {
-			throw new AssertionError("Index out of bounds");
-		}
+		// May throw an OOB exception if the caller isn't smart.
 		claims.remove(index);
 		saveToFile(ctx);
 	}
@@ -160,6 +158,7 @@ public class ExpenseMasterApplication extends Application {
 
 	private static void loadFromFile(Context ctx) {
 		// If the file exists, try to read it.
+		claims = new ArrayList<Claim>();
 		try {
 			FileInputStream fis = ctx.openFileInput(FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -177,24 +176,23 @@ public class ExpenseMasterApplication extends Application {
 			}
 			
 			fis.close();
+			Toast.makeText(ctx, "Loaded from file.", Toast.LENGTH_SHORT).show();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(ctx, "Failed to write: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(ctx, "Failed to write: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(ctx, "Failed to write: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
 	
 	private static void saveToFile(Context ctx) {
 		try {
+			Toast.makeText(ctx, "Saving...", Toast.LENGTH_SHORT).show();
 			// Need a context because we are calling in context free environment
 			FileOutputStream fos = ctx.openFileOutput(FILENAME, 0);
 			OutputStreamWriter out = new OutputStreamWriter(fos);
@@ -213,10 +211,13 @@ public class ExpenseMasterApplication extends Application {
 			//out.flush();
 			fos.close();
 			Toast.makeText(ctx, "Saved!", Toast.LENGTH_SHORT).show();
+		// Hopefully this never happens
 		} catch (FileNotFoundException e) {
+			Toast.makeText(ctx, "File not found.", Toast.LENGTH_SHORT).show();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			Toast.makeText(ctx, "Saving failed.", Toast.LENGTH_SHORT).show();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

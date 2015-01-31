@@ -26,19 +26,21 @@ public class EditClaimActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_claim);
 
+		// == Add Expense ==
 		Button addExpense = (Button) findViewById(R.id.add_expense_button);
         addExpense.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(EditClaimActivity.this,
-                        "edit_expense EditExpenseActivity", Toast.LENGTH_SHORT)
-                        .show();
-                // Make a request for a new expense
-        		Intent intent = new Intent(EditClaimActivity.this, EditExpenseActivity.class);
-        		startActivityForResult(intent, RequestCode.REQUEST_NEW_EXPENSE);
+            	if (saveClaim()) {
+	                // Make a request for a new expense
+	        		Intent intent = new Intent(EditClaimActivity.this, EditExpenseActivity.class);
+	        		startActivityForResult(intent, RequestCode.REQUEST_NEW_EXPENSE);
+            	}
             }
         });
-        
+		
+        // == Save Button ==
+        // XXX: Save button doesn't fit in user model. Remove ASAP.
 		Button save = (Button) findViewById(R.id.save_button);
         save.setOnClickListener(new OnClickListener() {
 			@Override
@@ -48,78 +50,101 @@ public class EditClaimActivity extends Activity {
         		
         		setResult(Activity.RESULT_OK, resultIntent);
         		
-
-        		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
-
-        		String name = claim_name.getText().toString().trim();
-        		Date startDate;
-        		Date endDate;
-        		// Try to convert start date to a real date
-        		try {
-					startDate = df.parse(claim_start_date.getText().toString());
-				} catch (ParseException e) {
-					// Stop on exception
-					Toast.makeText(EditClaimActivity.this, 
-							"Start date must be in format yyyy/mm/dd",
-							Toast.LENGTH_LONG).show();
-					return;
-				}
-        		// Try to convert end date to real date, if data entered
-        		try {
-        			String end_date = claim_end_date.getText().toString();
-        			if (end_date == null || end_date.isEmpty()) {
-        				endDate = null;
-        			} else {
-        				endDate = df.parse(claim_end_date.getText().toString());
-        			}
-				} catch (ParseException e) {
-					// Stop on exception
-					Toast.makeText(EditClaimActivity.this, 
-							"End date must be in format yyyy/mm/dd or blank",
-							Toast.LENGTH_LONG).show();
-					return;
-				}
-        		
         		// If we make it here, all things passed safely.
-        		// Update the claim now.
-        		claim.setName(name);
-        		claim.setStartDate(startDate);
-        		claim.setEndDate(endDate);
-        		
-        		// Require name must be filled.
-        		if (claim.getName() == null || claim.getName().isEmpty()) {
-    				Toast.makeText(EditClaimActivity.this,
-    						"Name field cannot be left blank.",
-    						Toast.LENGTH_SHORT).show();
-    			// Require start date to be filled
-        		} else if (claim.getStartDate() == null) {
-    				Toast.makeText(EditClaimActivity.this,
-    						"Start Date filed cannot be left blank.",
-    						Toast.LENGTH_SHORT).show();
-        		} else {
-        			// If saving as new, add to list and return.
-        			// The hosting activity is responsible for updating.
-	        		if (edit_position == -1) {
-	    				Toast.makeText(EditClaimActivity.this, "Adding claim",
-	    						Toast.LENGTH_SHORT).show();
-	        			ExpenseMasterApplication.addClaim(EditClaimActivity.this, claim);
-	        		// If saving an old, update entry and return.
-	        		} else {
-	    				Toast.makeText(EditClaimActivity.this, "Updating claim " +
-	    						edit_position, Toast.LENGTH_SHORT).show();
-	        			ExpenseMasterApplication.updateClaim(EditClaimActivity.this, edit_position, claim);
-	        		}
-	        		
-	        		finish();
-        		}
-            }
+        		if (saveClaim())
+        			finish();
+        	};
         });
+        
+	}
+	
+	private String getClaimName() {
+		return claim_name.getText().toString().trim();
+	}
+	
+	private Date getClaimStartDate() {
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		
+		// Try to convert start date to real date using default format
+		try {
+			return df.parse(claim_start_date.getText().toString());
+		} catch (ParseException e) {
+			// Stop if invalid parsing
+			Toast.makeText(EditClaimActivity.this, 
+					"Start date must be in format " + df.toPattern(),
+					Toast.LENGTH_LONG).show();
+			return null;
+		}
+	}
+	private Date getClaimEndDate() {
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		
+		// Try to convert end date to real date, if data entered
+		try {
+			String end_date = claim_end_date.getText().toString();
+			if (end_date == null || end_date.isEmpty()) {
+				return null;
+			} else {
+				return df.parse(claim_end_date.getText().toString());
+			}
+		} catch (ParseException e) {
+			// Stop on exception
+			Toast.makeText(EditClaimActivity.this, 
+					"End date must be in format "  + df.toPattern() + " or blank",
+					Toast.LENGTH_LONG).show();
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * Saves the claim safely, warning users of problems
+	 * @param name
+	 * @param startDate
+	 * @param endDate
+	 * @return Returns whether save was successful
+	 */
+	private boolean saveClaim() {
+		String name = getClaimName();
+		Date startDate = getClaimStartDate();
+		Date endDate = getClaimEndDate();
+		// Require name must be filled.
+		if (name == null || name.isEmpty()) {
+			Toast.makeText(EditClaimActivity.this,
+					"Name field cannot be left blank.",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		// Require start date to be filled
+		} else if (startDate == null) {
+			Toast.makeText(EditClaimActivity.this,
+					"Start Date cannot be left blank.",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		} else {
+			// If saving as new, add to list and return.
+			// The hosting activity is responsible for updating.
+    		if (edit_position == -1) {
+				Toast.makeText(EditClaimActivity.this, "Adding claim",
+						Toast.LENGTH_SHORT).show();
+    			ExpenseMasterApplication.addClaim(EditClaimActivity.this, claim);
+    		// If saving an old, update entry and return.
+    		} else {
+				Toast.makeText(EditClaimActivity.this, "Updating claim " +
+						edit_position, Toast.LENGTH_SHORT).show();
+    			ExpenseMasterApplication.updateClaim(EditClaimActivity.this, edit_position, claim);
+    		}
+		}
+		
+		// Update the claim now.
+		claim.setName(name);
+		claim.setStartDate(startDate);
+		claim.setEndDate(endDate);
+		return true;
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-
 		edit_position = getIntent().getIntExtra("position", -1);
 		if (edit_position == -1) {
 			// Did not get a position to edit. Will create new claim.
@@ -128,21 +153,10 @@ public class EditClaimActivity extends Activity {
 			// Request was to edit existing claim
 			claim = ExpenseMasterApplication.getClaim(edit_position); 
 		}
-
-        claim_name = (EditText) findViewById(R.id.claim_name_text);
-        claim_start_date = (EditText) findViewById(R.id.claim_start_date);
-        claim_end_date = (EditText) findViewById(R.id.claim_end_date);
-        
-        claim_name.setText(claim.getName());
-		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
-		
-        claim_start_date.setText(df.format(claim.getStartDate()));   
-        if (claim.getEndDate() == null) {
-        	claim_end_date.setText("");
-        } else {
-        	claim_end_date.setText(df.format(claim.getEndDate()));
-        }
-        
+	}
+	protected void onResume() {
+		super.onResume();
+		updateDisplay();
 	}
 	
 	@Override
@@ -155,7 +169,9 @@ public class EditClaimActivity extends Activity {
 	    		break;
 			case RequestCode.REQUEST_EDIT_CLAIM:
 				break;
-				
+			case RequestCode.REQUEST_NEW_EXPENSE:
+				saveClaim();
+				break;
 				
 			default:
 				throw new RuntimeException("Unknown request code");
@@ -179,6 +195,22 @@ public class EditClaimActivity extends Activity {
 		Intent resultIntent = new Intent();
 		setResult(Activity.RESULT_CANCELED, resultIntent);
 		finish();
+	}
+	
+	public void updateDisplay() {
+        claim_name = (EditText) findViewById(R.id.claim_name_text);
+        claim_start_date = (EditText) findViewById(R.id.claim_start_date);
+        claim_end_date = (EditText) findViewById(R.id.claim_end_date);
+        
+        claim_name.setText(claim.getName());
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		
+        claim_start_date.setText(df.format(claim.getStartDate()));   
+        if (claim.getEndDate() == null) {
+        	claim_end_date.setText("");
+        } else {
+        	claim_end_date.setText(df.format(claim.getEndDate()));
+        }
 	}
 
 }

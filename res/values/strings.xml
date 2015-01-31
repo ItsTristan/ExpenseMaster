@@ -11,6 +11,9 @@
     <string name="app_title">Expense Master</string>
     <string name="claims_header_text">Claims</string>
     
+    <!-- Input Hints -->
+    <string name="date_hint">YYYY/MM/DD</string>
+    
     <!-- Claims actions -->
     <string name="add_claim_string">Create New Claim</string>
     <string name="edit_claim_string">Edit Claim</string>
