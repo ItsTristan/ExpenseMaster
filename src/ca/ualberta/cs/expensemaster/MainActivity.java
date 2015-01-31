@@ -30,8 +30,8 @@ public class MainActivity extends Activity {
         newClaim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	// Make a request for a new claim through an activity
         		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
-                // Pass claim through activity as parcel
         		startActivityForResult(intent, RequestCode.REQUEST_NEW_CLAIM);
         		
             }
@@ -108,10 +108,11 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	protected void onActivityResult(int request_code, int result_code, Intent data) {
-		if (result_code == RESULT_OK) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
 			// Do things if result OK
-			switch (request_code) {
+			switch (requestCode) {
 			case RequestCode.REQUEST_NEW_CLAIM:
 	    		break;
 			case RequestCode.REQUEST_EDIT_CLAIM:
@@ -121,8 +122,8 @@ public class MainActivity extends Activity {
 			default:
 				throw new RuntimeException("Unknown request code");
 			}
-		} else if (result_code == RESULT_CANCELED) {
-			switch (request_code) {
+		} else if (resultCode == RESULT_CANCELED) {
+			switch (requestCode) {
 			case RequestCode.REQUEST_EDIT_CLAIM:
 			case RequestCode.REQUEST_NEW_CLAIM:
 				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();

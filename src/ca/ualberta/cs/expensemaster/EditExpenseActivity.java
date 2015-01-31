@@ -1,6 +1,7 @@
 package ca.ualberta.cs.expensemaster;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,8 +33,15 @@ public class EditExpenseActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
 	}
-
+	
+	@Override
+	public void onBackPressed() {
+		// Cancel without saving
+		super.onBackPressed();
+		Intent resultIntent = new Intent();
+		setResult(Activity.RESULT_CANCELED, resultIntent);
+		finish();
+	}
 
 }

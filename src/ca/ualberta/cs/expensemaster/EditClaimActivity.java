@@ -33,6 +33,9 @@ public class EditClaimActivity extends Activity {
                 Toast.makeText(EditClaimActivity.this,
                         "edit_expense EditExpenseActivity", Toast.LENGTH_SHORT)
                         .show();
+                // Make a request for a new expense
+        		Intent intent = new Intent(EditClaimActivity.this, EditExpenseActivity.class);
+        		startActivityForResult(intent, RequestCode.REQUEST_NEW_EXPENSE);
             }
         });
         
@@ -143,7 +146,36 @@ public class EditClaimActivity extends Activity {
 	}
 	
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			// Do things if result OK
+			switch (requestCode) {
+			case RequestCode.REQUEST_NEW_CLAIM:
+	    		break;
+			case RequestCode.REQUEST_EDIT_CLAIM:
+				break;
+				
+				
+			default:
+				throw new RuntimeException("Unknown request code");
+			}
+		} else if (resultCode == RESULT_CANCELED) {
+			switch (requestCode) {
+			case RequestCode.REQUEST_EDIT_CLAIM:
+			case RequestCode.REQUEST_NEW_CLAIM:
+				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
+				break;
+			case RequestCode.REQUEST_CLAIM_SUMMARY:
+				break;
+			}
+		}
+	};
+	
+	@Override
 	public void onBackPressed() {
+		// Cancel without saving
+		super.onBackPressed();
 		Intent resultIntent = new Intent();
 		setResult(Activity.RESULT_CANCELED, resultIntent);
 		finish();
