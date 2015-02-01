@@ -12,6 +12,9 @@
 bin/
 gen/
 
+# Include the .apk file
+!bin/ExpenseMaster.apk
+
 # Gradle files
 .gradle/
 build/
