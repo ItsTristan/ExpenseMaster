@@ -185,7 +185,6 @@ public class EditClaimActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		if (needs_save) {
-			Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
 			saveClaim();
 			needs_save = false;
 		}

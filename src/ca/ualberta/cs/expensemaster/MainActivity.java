@@ -70,7 +70,6 @@ public class MainActivity extends Activity implements EMView<ClaimsList> {
         		
                 // Pass list index through intent
         		intent.putExtra("claim_position", position);
-				Toast.makeText(MainActivity.this, "position: " + position, Toast.LENGTH_SHORT).show();
 
         		// Activity is responsible for the update
         		startActivityForResult(intent, RequestCode.REQUEST_CLAIM_SUMMARY);
@@ -149,13 +148,6 @@ public class MainActivity extends Activity implements EMView<ClaimsList> {
 	protected void onResume() {
 		super.onResume();
 		updateDisplay();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 	
 	@Override
