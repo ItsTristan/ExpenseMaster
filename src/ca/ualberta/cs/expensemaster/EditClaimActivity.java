@@ -43,8 +43,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class EditClaimActivity extends Activity {
-	private static Claim claim;
-	private static int claim_position;
+	private Claim claim;
+	private int claim_position;
 
 	// These are static so it's not forgotten if the activity closes.
     private static EditText claim_name;
@@ -156,6 +156,8 @@ public class EditClaimActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		// Not initialized yet
+		// We can't do the same thing as in Expenses because
+		// Expenses is the topmost activity.
 		if (claim == null) {
 			claim_position = getIntent().getIntExtra("claim_position", -1);
 			if (claim_position == -1) {

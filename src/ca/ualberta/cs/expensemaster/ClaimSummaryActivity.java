@@ -34,7 +34,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class ClaimSummaryActivity extends Activity implements EMView {
+public class ClaimSummaryActivity extends Activity implements EMView<Claim> {
 	private int position = -2;
 	private Claim claim;
 	
@@ -150,15 +150,6 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 
 		update(claim);
 
-	}
-
-	@Override
-	public void update(EMModel model) {
-		if (model instanceof Claim) {
-			// Safe downcast
-			update((Claim) model);
-			return;
-		}
 	}
 
 	public void update(Claim model) {

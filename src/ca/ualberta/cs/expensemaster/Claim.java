@@ -85,6 +85,7 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 	}
 	
 	public String getDateString() {
+		// Prints "<StartDate> - <EndDate>", or just "<StartDate>" if no end specified
 		if (end_date == null) {
 			return ExpenseMasterApplication.global_date_format.format(start_date);
 		} else {
@@ -126,7 +127,6 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 		return this.getStartDate().compareTo(another.getStartDate());
 	}
 	
-	// FIXME Does not work
 	public ArrayList<Money> getExpenseSummary() {
 		ArrayList<Money> results = new ArrayList<Money>();
 		Map<Currency, Money> sums = new HashMap<Currency, Money>();
@@ -134,7 +134,7 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 		for (Expense e : expenses) {
 			Money value = e.getValue();
 			Currency key = value.getCurrencyType();
-			// Add Moneys.
+			// Add Moneys together.
 			if (sums.containsKey(key)) {
 				sums.put(key, value.add(sums.get(key)));
 			} else {
@@ -142,6 +142,7 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 			}
 		}
 		
+		// Merge results into a list. 
 		for (Currency key : sums.keySet()) {
 			results.add(sums.get(key));
 		}
@@ -154,7 +155,6 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 	}
 
 	public ArrayList<Expense> getExpenseList() {
-		// TODO Auto-generated method stub
 		return expenses;
 	}
 
@@ -165,7 +165,7 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 
 	@Override
 	public String getSubText() {
-		// TODO Auto-generated method stub
+		// Format text for subtext list view.
 		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
 		if (end_date != null) {
 			return "Status: " + status +

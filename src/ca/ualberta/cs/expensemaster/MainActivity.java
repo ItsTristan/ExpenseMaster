@@ -34,7 +34,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements EMView<ClaimsList> {
 	
 	private ArrayAdapter<Claim> adapter;
 	private ListView claims_list;
@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
         		
                 // Pass list index through intent
         		intent.putExtra("claim_position", position);
+				Toast.makeText(MainActivity.this, "position: " + position, Toast.LENGTH_SHORT).show();
 
         		// Activity is responsible for the update
         		startActivityForResult(intent, RequestCode.REQUEST_CLAIM_SUMMARY);
@@ -125,15 +126,16 @@ public class MainActivity extends Activity {
         });
         
 		adapter = new SubTextAdapter<Claim>(this, R.layout.list_item, 
-				ExpenseMasterApplication.getClaims(this));
+				ExpenseMasterApplication.getClaimsList(this));
 		
         if (adapter == null) {
         	throw new RuntimeException("claims list not initialized");
         }
 
-		// XXX: claims_list is unsorted.
         claims_list.setAdapter(adapter);
-        
+
+        // Receive updates from claims
+        ExpenseMasterApplication.addView(this);     
 	}
 	
 
@@ -181,7 +183,12 @@ public class MainActivity extends Activity {
 		// Ensure claims are sorted when we display
 		// Java uses a TimSort so there shouldn't be a big
 		// performance hit.
-		ExpenseMasterApplication.sortClaims();
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void update(ClaimsList model) {
+		// TODO Auto-generated method stub
+		updateDisplay();
 	}
 }
