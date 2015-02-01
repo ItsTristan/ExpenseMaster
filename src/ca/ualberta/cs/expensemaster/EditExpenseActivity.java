@@ -164,6 +164,7 @@ public class EditExpenseActivity extends Activity {
 				Toast.makeText(this, "Amount must have " + 
 						currency_type.getDefaultFractionDigits() + " decimal places.",
 						Toast.LENGTH_SHORT).show();
+				return null;
 			}
 			cents = Integer.parseInt(value_parts[1]);
 		} else {

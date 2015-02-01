@@ -146,9 +146,17 @@ public class Money {
 	
 	public String toString() {
 		// Formats the string decimal with the appropriate number of fraction digits.
-		return String.format(Locale.US, "%d.%0"
+		// Need to check the case when numDigs <= 0, because these are valid
+		// return values and they will mess up the string formatter.
+		int numDigs = currency_type.getDefaultFractionDigits();
+		if (numDigs > 0) {
+			return String.format(Locale.US, "%d.%0"
 				+currency_type.getDefaultFractionDigits()
 				+"d %s", whole, cents, currency_type.toString());
+		} else {
+			return String.format(Locale.CANADA, "%d %s", whole,
+					currency_type.toString());
+		}
 	}
 	
 	/**
@@ -158,9 +166,14 @@ public class Money {
 	 */
 	public String toValueString() {
 		// Same as toString but without Currency names
-		return String.format(Locale.US, "%d.%0"
-				+currency_type.getDefaultFractionDigits()
-				+"d", whole, cents);
+		int numDigs = currency_type.getDefaultFractionDigits();
+		if (numDigs > 0) {
+			return String.format(Locale.CANADA, "%d.%0"
+					+currency_type.getDefaultFractionDigits()
+					+"d", whole, cents);
+		} else {
+			return String.format(Locale.CANADA, "%d", whole);
+		}
 	}
 
 	/**
