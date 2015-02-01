@@ -24,7 +24,7 @@ relative to the root.
 * Google-Gson `(Included /libs/)`
 
 ## Installation
-**An unsigned, compiled .apk file is available in the /bin/ folder as ExpenseMaster.apk.**
+**A signed, compiled .apk file is available in the /bin/ folder as ExpenseMaster.apk.**
 
 This project was built in Eclipse Luna, compliant with JDK 1.8, and targets the Android SDK Level 17 (Android 4.2.2). See **Requirements** above for information about libraries and components that might not be included in the repository.
 
