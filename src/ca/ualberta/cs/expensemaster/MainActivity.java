@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
             }
         });
         
-        // == Claims List View ==
+        // == Claims List (Tap) ==
         claims_list = (ListView) findViewById(R.id.claims_list_view);
         claims_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -58,7 +58,8 @@ public class MainActivity extends Activity {
         		startActivityForResult(intent, RequestCode.REQUEST_CLAIM_SUMMARY);
 			}
         });
-
+        
+        // == Claims List (Long Press) ==
         claims_list.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,

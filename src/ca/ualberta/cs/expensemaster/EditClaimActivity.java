@@ -240,6 +240,11 @@ public class EditClaimActivity extends Activity {
 			return false;
 			
 		} else {
+			// Update the claim now.
+			claim.setName(name);
+			claim.setStartDate(startDate);
+			claim.setEndDate(endDate);
+			
 			// If saving as new, add to list and return.
 			// The hosting activity is responsible for updating.
     		if (claim_position == -1) {
@@ -250,8 +255,6 @@ public class EditClaimActivity extends Activity {
 				// Make sure the intent knows that from now on, we're editing
 				// at this position.
 				getIntent().putExtra("claim_position", claim_position);
-				// Add and save to claimslist.
-				ExpenseMasterApplication.addClaim(EditClaimActivity.this, claim);
 				
     		// If saving an old, update entry and return.
     		} else {
@@ -260,11 +263,6 @@ public class EditClaimActivity extends Activity {
     			ExpenseMasterApplication.updateClaim(EditClaimActivity.this, claim_position, claim);
     		}
 		}
-		
-		// Update the claim now.
-		claim.setName(name);
-		claim.setStartDate(startDate);
-		claim.setEndDate(endDate);
 		return true;
 	}
 	
