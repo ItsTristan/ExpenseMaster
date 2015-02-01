@@ -16,8 +16,10 @@ public class Expense extends EMModel {
 	}
 
 	public Expense() {
-		// Empty expense is default currency @ $0 on current date.
-		this("", new Money(Currency.getInstance(Locale.getDefault()), 0), new Date());
+		// Empty expense is CAD @ $0 on current date.
+		// getDefault() for Locale causes problems because, for some
+		// reason, it's not ISO compliant.
+		this("", new Money(Currency.getInstance(Locale.CANADA), 0), new Date());
 	}
 
 	public String getName() {

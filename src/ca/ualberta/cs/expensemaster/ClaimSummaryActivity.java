@@ -1,5 +1,6 @@
 package ca.ualberta.cs.expensemaster;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -56,8 +57,21 @@ public class ClaimSummaryActivity extends Activity implements EMView {
         		
         		// Activity is responsible for the update
         		startActivityForResult(intent, RequestCode.REQUEST_EDIT_CLAIM);
+        		
+        		// Close this activity on Edit so they return back to the main menu,
+        		finish();
             }
         });
+        
+        // == Send Email ==
+        Button send_email = (Button) findViewById(R.id.email_claim);
+        send_email.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Build an email for this claim and open the email client.
+				sendEmail();
+			}
+		});
 
         // == Status Spinner ==
 		claim_status = (Spinner) findViewById(R.id.status_spinner);
@@ -93,7 +107,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		});
         
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -155,6 +169,54 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		edit_claim.setEnabled(claim.getStatus() == ClaimStatus.IN_PROGRESS ||
 							claim.getStatus() == ClaimStatus.RETURNED);
 		spinner_adapter.notifyDataSetChanged();
+	}
+	
+	private void sendEmail() {
+		// HTML Email doesn't work very well in Android.
+		// Because of this, this function outputs markdown instead.
+		MarkdownEmail em = new MarkdownEmail("", "Emailing Claim: '"+claim.getName()+"'");
+		
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		
+		// Put in some boring details...
+		em.putH1(claim.getName());
+		em.put("Start Date: " + df.format(claim.getStartDate()));
+		if (claim.getEndDate() != null)
+			em.put("End Date: " + df.format(claim.getEndDate()));
+		em.put("");
+
+		if (claim.getExpenseCount() > 0) {
+			// Put a big ol' summary in there
+			em.putH2("Total Value");
+			{
+				for (Money m : claim.getExpenseSummary()) {
+					em.putListItem(m.toString());
+				}
+			}
+			em.put("");
+		
+			// Throw in the details about all of the expenses.
+			em.putH2("Details");
+			em.put("(Dates are in " + df.toPattern() + " format)\n");
+			{
+				
+				for (Expense e : claim.getExpenseList()) {
+					em.put(e.getName());
+					{
+						em.putListItem("Amount: " + e.getValue().toString());
+						em.putListItem("Date: " + df.format(e.getDate()));
+					}
+					em.put("");
+				}
+			}
+		} else {
+			// FIXME This shouldn't ever happen. Disable the button?
+			em.putParagraph("No expenses to list.");
+		}
+		em.close();
+		
+		// Send the email.
+		em.send(this);
 	}
 
 }
