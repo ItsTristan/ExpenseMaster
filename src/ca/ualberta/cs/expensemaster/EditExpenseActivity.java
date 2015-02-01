@@ -39,9 +39,6 @@ public class EditExpenseActivity extends Activity {
         save.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(EditExpenseActivity.this,
-                        "save; goto EditClaimActivity", Toast.LENGTH_SHORT)
-                        .show();
                 // Try to save. Do nothing if fails.
                 if (saveExpense()) {
 	                setResult(RESULT_OK);

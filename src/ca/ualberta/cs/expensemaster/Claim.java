@@ -62,7 +62,7 @@ public class Claim extends EMModel implements Comparable<Claim> {
 	}
 	
 	public String toString() {
-		return getName();
+		return getName() + "(" + start_date.getTime() + ")";
 	}
 	
 	public String getDateString() {

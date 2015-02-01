@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ClaimSummaryActivity extends Activity implements EMView {
 	private int position = -2;
@@ -49,10 +48,6 @@ public class ClaimSummaryActivity extends Activity implements EMView {
         edit_claim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(ClaimSummaryActivity.this,
-                        "edit_claim EditClaimActivity", Toast.LENGTH_SHORT)
-                        .show();
-
 				// On tap, open claim for editing
         		Intent intent = new Intent(ClaimSummaryActivity.this, EditClaimActivity.class);
         		

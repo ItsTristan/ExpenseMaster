@@ -120,6 +120,12 @@ public class MainActivity extends Activity {
 	
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		updateDisplay();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -127,6 +133,7 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
+	// XXX This probably isn't necessary anymore.
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
@@ -137,7 +144,6 @@ public class MainActivity extends Activity {
 			case RequestCode.REQUEST_EDIT_CLAIM:
 				break;
 				
-				
 			default:
 				throw new RuntimeException("Unknown request code");
 			}
@@ -145,7 +151,7 @@ public class MainActivity extends Activity {
 			switch (requestCode) {
 			case RequestCode.REQUEST_EDIT_CLAIM:
 			case RequestCode.REQUEST_NEW_CLAIM:
-				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
+				// Action was canceled. Don't add.
 				break;
 			case RequestCode.REQUEST_CLAIM_SUMMARY:
 				break;
@@ -154,12 +160,10 @@ public class MainActivity extends Activity {
 	}
 	
 	private void updateDisplay() {
+		// Ensure claims are sorted when we display
+		// Java uses a TimSort so there shouldn't be a big
+		// performance hit.
+		ExpenseMasterApplication.sortClaims();
 		adapter.notifyDataSetChanged();
-	}
-	
-	protected void onStart() {
-		super.onStart();
-		updateDisplay();
-        
 	}
 }

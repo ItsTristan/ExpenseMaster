@@ -62,7 +62,7 @@ public class EditClaimActivity extends Activity {
         		
         		setResult(Activity.RESULT_OK, resultIntent);
         		
-        		// If we make it here, all things passed safely.
+        		// Save and finish
         		if (saveClaim())
         			finish();
         	};
@@ -154,12 +154,8 @@ public class EditClaimActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			// Do things if result OK
+			// Save claim on OK
 			switch (requestCode) {
-			case RequestCode.REQUEST_NEW_CLAIM:
-	    		break;
-			case RequestCode.REQUEST_EDIT_CLAIM:
-				break;
 			case RequestCode.REQUEST_NEW_EXPENSE:
 			case RequestCode.REQUEST_EDIT_EXPENSE:
 				saveClaim();
@@ -172,7 +168,6 @@ public class EditClaimActivity extends Activity {
 			switch (requestCode) {
 			case RequestCode.REQUEST_EDIT_CLAIM:
 			case RequestCode.REQUEST_NEW_CLAIM:
-				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
 				break;
 			case RequestCode.REQUEST_CLAIM_SUMMARY:
 				break;
@@ -255,6 +250,9 @@ public class EditClaimActivity extends Activity {
 				// Make sure the intent knows that from now on, we're editing
 				// at this position.
 				getIntent().putExtra("claim_position", claim_position);
+				// Add and save to claimslist.
+				ExpenseMasterApplication.addClaim(EditClaimActivity.this, claim);
+				
     		// If saving an old, update entry and return.
     		} else {
 				Toast.makeText(EditClaimActivity.this, "Updating claim " +
