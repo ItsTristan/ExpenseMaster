@@ -23,13 +23,16 @@ public class EditClaimActivity extends Activity {
 	private static Claim claim;
 	private static int claim_position;
 
-    EditText claim_name;
-    EditText claim_start_date;
-    EditText claim_end_date;
+	// These are static so it's not forgotten if the activity closes.
+    private static EditText claim_name;
+    private static EditText claim_start_date;
+    private static EditText claim_end_date;
     
-    ListView expense_list;
+    private static ListView expense_list;
     SubTextAdapter<Expense> adapter;
 	
+    boolean needs_save = false;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,7 +111,8 @@ public class EditClaimActivity extends Activity {
 			    		public void onClick(DialogInterface dialog, int which) { 
 				    		// Delete claim
 			            	claim.deleteExpense(adapter.getItem(position));
-							updateViews();
+			            	// XXX Does this need to be here?
+							setupViews();
 			    		}
 			    	})
 			    	.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -123,30 +127,36 @@ public class EditClaimActivity extends Activity {
 				return true;
 			}
         });
-        
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		claim_position = getIntent().getIntExtra("claim_position", -1);
-		if (claim_position == -1) {
-			// Did not get a position to edit. Will create new claim.
-			claim = new Claim();
-		} else {
-			// Request was to edit existing claim
-			claim = ExpenseMasterApplication.getClaim(claim_position); 
+		// Not initialized yet
+		if (claim == null) {
+			claim_position = getIntent().getIntExtra("claim_position", -1);
+			if (claim_position == -1) {
+				// Did not get a position to edit. Will create new claim.
+				claim = new Claim();
+			} else {
+				// Request was to edit existing claim
+				claim = ExpenseMasterApplication.getClaim(claim_position); 
+			}
 		}
 
         // Expense list view and adapter
 		adapter = new SubTextAdapter<Expense>(this, R.layout.list_item,
 				claim.getExpenseList());
 		expense_list.setAdapter(adapter);
+		
+		// Initialize the views with claim data
+		setupViews();
 	}
 
 	protected void onResume() {
 		super.onResume();
-		updateViews();
+		if (needs_save)
+			saveClaim();
 	}
 
 	@Override
@@ -157,7 +167,9 @@ public class EditClaimActivity extends Activity {
 			switch (requestCode) {
 			case RequestCode.REQUEST_NEW_EXPENSE:
 			case RequestCode.REQUEST_EDIT_EXPENSE:
-				saveClaim();
+				// We can't save it here because onActivityResult is
+				// called before onResume.
+				needs_save = true;
 				break;
 				
 			default:
@@ -258,6 +270,9 @@ public class EditClaimActivity extends Activity {
     			ExpenseMasterApplication.updateClaim(EditClaimActivity.this, claim_position, claim);
     		}
 		}
+		
+		// Update views to match
+		setupViews();
 		return true;
 	}
 	
@@ -270,7 +285,7 @@ public class EditClaimActivity extends Activity {
 		finish();
 	}
 	
-	public void updateViews() {
+	public void setupViews() {
 		// Get the views in question
         claim_name = (EditText) findViewById(R.id.claim_name_text);
         claim_start_date = (EditText) findViewById(R.id.claim_start_date);

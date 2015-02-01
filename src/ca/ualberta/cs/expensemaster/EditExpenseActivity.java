@@ -84,11 +84,8 @@ public class EditExpenseActivity extends Activity {
 				throw new RuntimeException("Spinner selected nothing");
 			}
 		});
-	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
+		
+		// Find a place to put expense info.
 		// This should never be -1
 		claim_position = getIntent().getIntExtra("claim_position", -1);
 		if (claim_position == -1)
@@ -101,7 +98,7 @@ public class EditExpenseActivity extends Activity {
 		} else {
 			expense = claim.getExpense(expense_position);
 		}
-		
+
 		// Associate spinner with available currencies enum
 		spinner_adapter = new ArrayAdapter<AvailableCurrencies>(this,
 				android.R.layout.simple_spinner_item,
@@ -111,6 +108,11 @@ public class EditExpenseActivity extends Activity {
 
 		// Load expense attributes into views
 		updateViews();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	@Override
