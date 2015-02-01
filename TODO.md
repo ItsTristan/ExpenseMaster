@@ -13,7 +13,7 @@ Claims
 - [X] delete individual claims
 
 Emails
-- [ ] email a selected claim and its constituent expense items
+- [X] email a selected claim and its constituent expense items
   * Might need to factor out the methods for Json to more general things
     * Interface ClaimExportable
     * Class HTMLExporter implements ClaimExportable
@@ -48,7 +48,7 @@ Persistence
       * This is practical if every usage is a full session, but it's unrealistic.
 
 Consistency
-- [ ] App assists consistent data entry
+- [X] App assists consistent data entry
   * Add android:hint to fields
   * Date parsing through SimpleDateFormat is weak at best.
     * Allows dates such as 123/45/67 to be entered validly.
