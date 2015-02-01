@@ -1,3 +1,13 @@
+To Fix
+======
+- [ ] ExpenseMasterActivity does too much work.
+ * Move claims-related activities to new class
+- [ ] UML needs to be updated
+- [ ] A Wiki page needs to be built
+- [ ] Add a binary file (APK) to the repo
+- [ ] Update Readme file
+- [ ] Include video somewhere either in the repo or in the submission
+
 Requirements
 ============
 Expenses
@@ -72,7 +82,8 @@ UML
 - [ ] Effectively covers the problem domain
 
 Demonstration
-- [ ] Two minute maximum video demonstrating required functionality
+- [X] Two minute maximum video demonstrating required functionality
+  * Need to find a place for it in the repo
 
 Submission
 ==========
@@ -88,5 +99,5 @@ Important
 - [ ] Contains a README file
   * Should describe intent of program
   * Should mention external libraries used
-- [ ] UML is in the doc directory
+- [X] UML is in the doc directory
 - [X] SQLite is not used
