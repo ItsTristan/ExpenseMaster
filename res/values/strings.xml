@@ -2,18 +2,18 @@
 <resources>
 
     <string name="app_name">tmeleshk-notes</string>
-    
+
     <!-- Menu (main) -->
     <string name="action_settings">Settings</string>
     <string name="action_add_claim">New Claim</string>
-    
+
     <!-- Head texts -->
     <string name="app_title">Expense Master</string>
     <string name="claims_header_text">Claims</string>
-    
+
     <!-- Input Hints -->
     <string name="date_hint">YYYY/MM/DD</string>
-    
+
     <!-- Claims actions -->
     <string name="add_claim_string">Create New Claim</string>
     <string name="edit_claim_string">Edit Claim</string>
@@ -22,14 +22,13 @@
     <string name="add_expense_string">Add Expense</string>
     <string name="edit_expense_string">Edit Expense</string>
     <string name="delete_expense_string">Delete Expense</string>
-    
     <string name="claim_placeholder_string">&lt;Claim Name&gt;</string>
-    
+
     <!-- Button prompts -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    
-    <!--  Claim prompts -->
+
+    <!-- Claim prompts -->
     <string name="claim_name_prompt">Claim Name:</string>
     <string name="claim_status_prompt">Status:</string>
     <string name="claim_start_date_prompt">Start Date:</string>
@@ -46,11 +45,13 @@
     <string name="app_claim_summary">Summary</string>
     <string name="app_edit_expense">Edit Expense</string>
     <string name="email_claim_string">Email Claim</string>
-    
+
     <!-- Status -->
     <string name="status_in_progress">In Progress</string>
     <string name="status_submitted">Submitted</string>
     <string name="status_returned">Returned</string>
     <string name="status_approved">Approved</string>
-    
+    <string name="title_activity_send_email">Email Claim</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
