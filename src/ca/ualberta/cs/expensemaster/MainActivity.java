@@ -24,11 +24,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Button newClaim;
-		
 		setContentView(R.layout.activity_main);
 		
 		// == Add Claim Button ==
+		Button newClaim;
 		newClaim = (Button) findViewById(R.id.add_claim_button);
         newClaim.setOnClickListener(new OnClickListener() {
             @Override
@@ -107,7 +106,7 @@ public class MainActivity extends Activity {
 			}
         });
         
-		adapter = new ArrayAdapter<Claim>(this, R.layout.list_item, 
+		adapter = new SubTextAdapter<Claim>(this, R.layout.list_item, 
 				ExpenseMasterApplication.getClaims(this));
 		
         if (adapter == null) {

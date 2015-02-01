@@ -12,13 +12,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 public class EditClaimActivity extends Activity {
 	private static Claim claim;
@@ -29,7 +28,7 @@ public class EditClaimActivity extends Activity {
     EditText claim_end_date;
     
     ListView expense_list;
-    ArrayAdapter<Expense> adapter;
+    SubTextAdapter<Expense> adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +139,7 @@ public class EditClaimActivity extends Activity {
 		}
 
         // Expense list view and adapter
-		adapter = new ArrayAdapter<Expense>(this, R.layout.list_item,
+		adapter = new SubTextAdapter<Expense>(this, R.layout.list_item,
 				claim.getExpenseList());
 		expense_list.setAdapter(adapter);
 	}

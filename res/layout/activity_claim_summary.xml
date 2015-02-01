@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="@string/expense_summary_prompt"
         android:labelFor="@+id/expense_summary_list"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <ListView
         android:id="@+id/expense_summary_list"

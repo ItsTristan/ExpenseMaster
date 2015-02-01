@@ -1,12 +1,13 @@
 package ca.ualberta.cs.expensemaster;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Claim extends EMModel implements Comparable<Claim> {
+public class Claim extends EMModel implements Comparable<Claim>, SubtextListable {
 	
 	private String name;
 	private ClaimStatus status;
@@ -137,6 +138,25 @@ public class Claim extends EMModel implements Comparable<Claim> {
 	public ArrayList<Expense> getExpenseList() {
 		// TODO Auto-generated method stub
 		return expenses;
+	}
+
+	@Override
+	public String getText() {
+		return name;
+	}
+
+	@Override
+	public String getSubText() {
+		// TODO Auto-generated method stub
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		if (end_date != null) {
+			return "Status: " + status +
+			"\nStart Date: " + df.format(start_date) +
+			"\nEnd Date: " + df.format(end_date);
+		} else {
+			return "Status: " + status +
+			"\nStart Date: " + df.format(start_date);
+		}
 	}
 }
 

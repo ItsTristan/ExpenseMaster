@@ -4,7 +4,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
-public class Expense extends EMModel {
+public class Expense extends EMModel implements SubtextListable {
 	private String name;
 	private Date date;
 	private Money value;
@@ -51,6 +51,17 @@ public class Expense extends EMModel {
 	
 	public String toString() {
 		return this.name + " : " + this.value.toString();
+	}
+
+	@Override
+	public String getText() {
+		return name;
+	}
+
+	@Override
+	public String getSubText() {
+		return value.toString() + " on " +
+				ExpenseMasterApplication.global_date_format.format(date);
 	}
 
 }
