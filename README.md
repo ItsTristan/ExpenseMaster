@@ -24,10 +24,9 @@ relative to the root.
 * Google-Gson `(Included /libs/)`
 
 ## Installation
-This project was built in Eclipse Luna, compliant with JDK 1.8, and targets the Android SDK Level 17 (Android 4.2.2). See **Requirements** above for information about libraries and components that might not be included in the repository.
+**An unsigned, compiled .apk file is available in the /bin/ folder as ExpenseMaster.apk.**
 
-## Documentation
-See the project's GitHub Wiki page for documentation at https://github.com/ItsTristan/ExpenseMaster/wiki.
+This project was built in Eclipse Luna, compliant with JDK 1.8, and targets the Android SDK Level 17 (Android 4.2.2). See **Requirements** above for information about libraries and components that might not be included in the repository.
 
 ## License
 Please see the file called LICENSE.
