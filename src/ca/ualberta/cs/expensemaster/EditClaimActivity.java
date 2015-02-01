@@ -43,7 +43,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class EditClaimActivity extends Activity {
-	private Claim claim;
+	private static Claim claim;
 	private int claim_position;
 
 	// These are static so it's not forgotten if the activity closes.
@@ -88,8 +88,11 @@ public class EditClaimActivity extends Activity {
         		setResult(Activity.RESULT_OK, resultIntent);
         		
         		// Save and finish
-        		if (saveClaim())
+        		if (saveClaim()) {
+        			// Clean up so we get a new copy next time.
+        			claim = null;
         			finish();
+        		}
         	};
         });
 
@@ -150,11 +153,7 @@ public class EditClaimActivity extends Activity {
 				return true;
 			}
         });
-	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
+
 		// Not initialized yet
 		// We can't do the same thing as in Expenses because
 		// Expenses is the topmost activity.
@@ -177,11 +176,19 @@ public class EditClaimActivity extends Activity {
 		// Initialize the views with claim data
 		setupViews();
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
 
 	protected void onResume() {
 		super.onResume();
-		if (needs_save)
+		if (needs_save) {
+			Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
 			saveClaim();
+			needs_save = false;
+		}
 	}
 
 	@Override
@@ -307,6 +314,8 @@ public class EditClaimActivity extends Activity {
 		super.onBackPressed();
 		Intent resultIntent = new Intent();
 		setResult(Activity.RESULT_CANCELED, resultIntent);
+		// Clean up so we get a new copy next time.
+		claim = null;
 		finish();
 	}
 	
