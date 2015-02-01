@@ -20,6 +20,7 @@ package ca.ualberta.cs.expensemaster;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -108,6 +109,9 @@ public class ExpenseMasterApplication extends Application {
 			}
 			// Close the stream
 			fis.close();
+		} catch (FileNotFoundException e) {
+			// long hair don't care;
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

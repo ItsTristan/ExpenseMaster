@@ -11,6 +11,10 @@ import java.util.Collections;
 public class ClaimsList extends EMModel {
 	private static ArrayList<Claim> claims;
 	
+	public ClaimsList() {
+		claims = new ArrayList<Claim>();
+	}
+	
 	public ArrayList<Claim> getClaims() {
 		return claims;
 	}
