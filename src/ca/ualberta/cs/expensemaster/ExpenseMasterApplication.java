@@ -88,8 +88,6 @@ public class ExpenseMasterApplication extends Application {
 			reader.close();
 
 			fis.close();
-			// XXX 
-			Toast.makeText(ctx, "Loaded from file.", Toast.LENGTH_SHORT).show();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -115,9 +113,6 @@ public class ExpenseMasterApplication extends Application {
 
 			// Force Linux to properly close its dang streams!
 			fos.close();
-			// XXX 
-			Toast.makeText(ctx, "Saved!", Toast.LENGTH_SHORT).show();
-			// Hopefully this never happens
 		} catch (FileNotFoundException e) {
 			Toast.makeText(ctx, "File not found.", Toast.LENGTH_SHORT).show();
 			// TODO Auto-generated catch block

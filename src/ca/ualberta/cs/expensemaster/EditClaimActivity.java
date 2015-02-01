@@ -247,8 +247,6 @@ public class EditClaimActivity extends Activity {
 			// If saving as new, add to list and return.
 			// The hosting activity is responsible for updating.
     		if (claim_position == -1) {
-				Toast.makeText(EditClaimActivity.this, "Adding claim",
-						Toast.LENGTH_SHORT).show();
 				// Set the edit position to the one that's just been created.
 				claim_position = ExpenseMasterApplication.addClaim(EditClaimActivity.this, claim);
 				// Make sure the intent knows that from now on, we're editing
@@ -257,8 +255,6 @@ public class EditClaimActivity extends Activity {
 				
     		// If saving an old, update entry and return.
     		} else {
-				Toast.makeText(EditClaimActivity.this, "Updating claim " +
-						claim_position, Toast.LENGTH_SHORT).show();
     			ExpenseMasterApplication.updateClaim(EditClaimActivity.this, claim_position, claim);
     		}
 		}
