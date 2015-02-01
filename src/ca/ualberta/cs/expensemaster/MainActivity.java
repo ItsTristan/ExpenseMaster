@@ -19,26 +19,30 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private ArrayAdapter<Claim> adapter;
-
+	private ListView claims_list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Button newClaim;
+		
 		setContentView(R.layout.activity_main);
 		
 		// == Add Claim Button ==
-		Button newClaim = (Button) findViewById(R.id.add_claim_button);
+		newClaim = (Button) findViewById(R.id.add_claim_button);
         newClaim.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	// Make a request for a new claim through an activity
         		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
-                // Pass claim through activity as parcel
+        		// Does not pass a list position because it's a new claim.
         		startActivityForResult(intent, RequestCode.REQUEST_NEW_CLAIM);
         		
             }
         });
         
         // == Claims List View ==
-        ListView claims_list = (ListView) findViewById(R.id.claims_list_view);
+        claims_list = (ListView) findViewById(R.id.claims_list_view);
         claims_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -48,7 +52,7 @@ public class MainActivity extends Activity {
         		Intent intent = new Intent(MainActivity.this, ClaimSummaryActivity.class);
         		
                 // Pass list index through intent
-        		intent.putExtra("position", position);
+        		intent.putExtra("claim_position", position);
 
         		// Activity is responsible for the update
         		startActivityForResult(intent, RequestCode.REQUEST_CLAIM_SUMMARY);
@@ -59,46 +63,61 @@ public class MainActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				// On long click, delete
-				// http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
-				//  Creates the alert dialog and immediately discards after displaying
-				
 				// position is set to final so that the delegate doesn't
 				// complain about position changing in the outer body.
-				new AlertDialog.Builder(MainActivity.this)
-			    	.setTitle("Delete entry")
-			    	.setMessage("Are you sure you want to delete this entry?")
-			    	.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-			    		public void onClick(DialogInterface dialog, int which) { 
-				    		// Delete claim
-			            	ExpenseMasterApplication.deleteClaim(MainActivity.this, position);
-							updateDisplay();
-			    		}
-			    	})
-			    	.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-			    		public void onClick(DialogInterface dialog, int which) { 
-			    			// do nothing
-			    		}
-			    	})
-			    	.setIcon(android.R.drawable.ic_dialog_alert)
-			    	.show();
+				// FIXME The Id from claims_list isn't pointing to the right
+				//		 object. Because of this, we have to ensure that
+				//		 the list in the adapter is sync'd with the one in
+				//		 the application at all times.
+				Claim c = ExpenseMasterApplication.getClaim(position);
+				
+				// If APPROVED or SUBMITTED, don't allow delete
+				if (c.getStatus() == ClaimStatus.APPROVED || c.getStatus() == ClaimStatus.SUBMITTED) {
+					// Notify and don't consume the hold so it can be edited.
+					Toast.makeText(MainActivity.this, "Claim cannot be deleted (already " + 
+							c.getStatus().toString() +")", Toast.LENGTH_SHORT).show();
+					return false;
+				} else {
+					// Display alert for delete
+					// http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+					//  Creates the alert dialog and immediately discards after displaying
+					new AlertDialog.Builder(MainActivity.this)
+				    	.setTitle("Delete entry")
+				    	.setMessage("Are you sure you want to delete this entry?")
+				    	.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				    		public void onClick(DialogInterface dialog, int which) { 
+					    		// Delete claim using position (see note above)
+				            	ExpenseMasterApplication.deleteClaim(MainActivity.this, 
+				            			position);
+								updateDisplay();
+				    		}
+				    	})
+				    	.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				    		public void onClick(DialogInterface dialog, int which) { 
+				    			// do nothing
+				    		}
+				    	})
+				    	.setIcon(android.R.drawable.ic_dialog_alert)
+				    	.show();
+				}
 				
 				// Consume the long click
 				return true;
 			}
         });
         
-        
 		adapter = new ArrayAdapter<Claim>(this, R.layout.list_item, 
-				ExpenseMasterApplication.getClaims(MainActivity.this));
+				ExpenseMasterApplication.getClaims(this));
+		
+        if (adapter == null) {
+        	throw new RuntimeException("claims list not initialized");
+        }
 
 		// XXX: claims_list is unsorted.
         claims_list.setAdapter(adapter);
         
-        // On list view tap, goto ClaimSummaryActivity[index]
-        // On list view hold tap, alert delete?
-        
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,10 +127,11 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	protected void onActivityResult(int request_code, int result_code, Intent data) {
-		if (result_code == RESULT_OK) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
 			// Do things if result OK
-			switch (request_code) {
+			switch (requestCode) {
 			case RequestCode.REQUEST_NEW_CLAIM:
 	    		break;
 			case RequestCode.REQUEST_EDIT_CLAIM:
@@ -121,8 +141,8 @@ public class MainActivity extends Activity {
 			default:
 				throw new RuntimeException("Unknown request code");
 			}
-		} else if (result_code == RESULT_CANCELED) {
-			switch (request_code) {
+		} else if (resultCode == RESULT_CANCELED) {
+			switch (requestCode) {
 			case RequestCode.REQUEST_EDIT_CLAIM:
 			case RequestCode.REQUEST_NEW_CLAIM:
 				Toast.makeText(this, "Action was canceled", Toast.LENGTH_SHORT).show();
@@ -131,18 +151,15 @@ public class MainActivity extends Activity {
 				break;
 			}
 		}
-		
-		updateDisplay();
 	}
 	
 	private void updateDisplay() {
-//		this.claims = ExpenseMasterApplication.getClaims();
 		adapter.notifyDataSetChanged();
 	}
 	
 	protected void onStart() {
 		super.onStart();
-		// TODO try read. If fail, set new.
+		updateDisplay();
         
 	}
 }

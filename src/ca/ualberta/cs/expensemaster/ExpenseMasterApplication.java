@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
+import java.util.Date;
 import java.util.Locale;
 
 import android.app.Application;
@@ -36,26 +37,31 @@ public class ExpenseMasterApplication extends Application {
 		return claims;
 	}
 
-	public static void addClaim(Context ctx, Claim c) {
+	/**
+	 * Adds a claim to the application.
+	 * @param ctx
+	 * @param c
+	 * @return The index of the newly added claim.
+	 */
+	public static int addClaim(Context ctx, Claim c) {
 		if (! claims.contains(c)) {
 			claims.add(c);
 			Collections.sort(claims);
 			saveToFile(ctx);
 		}
+		return claims.indexOf(c);
 	}
 
 	public static void deleteClaim(Context ctx, Claim c) {
-		if (BuildConfig.DEBUG & claims.contains(c)) {
+		if (BuildConfig.DEBUG && claims.contains(c)) {
 			throw new AssertionError("Claim not found");
 		}
 		claims.remove(c);
 		saveToFile(ctx);
 	}
-
+	
 	public static void deleteClaim(Context ctx, int index) {
-		if (BuildConfig.DEBUG & 0 <= index && index < claims.size()) {
-			throw new AssertionError("Index out of bounds");
-		}
+		// May throw an OOB exception if the caller doesn't validate.
 		claims.remove(index);
 		saveToFile(ctx);
 	}
@@ -65,10 +71,18 @@ public class ExpenseMasterApplication extends Application {
 		saveToFile(ctx);
 	}
 	
+	public static int findClaim(Claim c) {
+		return claims.indexOf(c);
+	}
+	
 	public static Claim getClaim(int index) {
 		return claims.get(index);
 	}
 	
+	
+	// FIXME: This should be moved to its own class for serializing stuff.
+	//			This way, we can use the same interface for exporting HTML
+	//			when we make the Email portion.
 	private static Claim readClaim(JsonReader reader) throws IOException, ParseException {
 		reader.beginObject(); // new Claim
 		Claim c = new Claim();
@@ -82,9 +96,9 @@ public class ExpenseMasterApplication extends Application {
 			} else if (name.equals("claim_status")) {
 				c.setStatus(ClaimStatus.valueOf(reader.nextString()));
 			} else if (name.equals("claim_start_date")) {
-				c.setStartDate(global_date_format.parse(reader.nextString()));
+				c.setStartDate(new Date(reader.nextLong()));
 			} else if (name.equals("claim_end_date")) {
-				c.setEndDate(global_date_format.parse(reader.nextString()));
+				c.setEndDate(new Date(reader.nextLong()));
 			} else if (name.equals("expenses")) {
 				// Array<Expense>
 				reader.beginArray();
@@ -106,6 +120,7 @@ public class ExpenseMasterApplication extends Application {
 		String expense_name = null;
 		Currency c = null;
 		String amount = null;
+		Date date = null;
 
 		reader.beginObject(); // new Expense
 		while (reader.hasNext()) {
@@ -117,6 +132,8 @@ public class ExpenseMasterApplication extends Application {
 				c = Currency.getInstance(reader.nextString());
 			} else if (name.equals("amount")) {
 				amount = reader.nextString();
+			} else if (name.equals("date")) {
+				date = new Date(reader.nextLong());
 			} else {
 				reader.skipValue();
 			}
@@ -124,10 +141,10 @@ public class ExpenseMasterApplication extends Application {
 		reader.endObject(); // end Expense
 		
 		// Make sure all the data is here...
-		if (expense_name == null || c == null || amount == null) {
+		if (expense_name == null || c == null || amount == null || date == null) {
 			throw new ParseException("Expense is missing data", 0);
 		} else {
-			return new Expense(expense_name, new Money(c, amount));
+			return new Expense(expense_name, new Money(c, amount), date);
 		}
 	}
 	
@@ -136,9 +153,11 @@ public class ExpenseMasterApplication extends Application {
 		writer.beginObject(); // new Claim
 		writer.name("claim_name").value(c.getName());
 		writer.name("claim_status").value(c.getStatus().name());
-		writer.name("claim_start_date").value(global_date_format.format(c.getStartDate()));
+		// Date is written as milliseconds from epoch to be independent of
+		// the global date format
+		writer.name("claim_start_date").value(c.getStartDate().getTime());
 		if (c.getEndDate() != null)
-			writer.name("claim_end_date").value(global_date_format.format(c.getEndDate()));
+			writer.name("claim_end_date").value(c.getEndDate().getTime());
 		
 		// Array<Expense>
 		writer.name("expenses").beginArray();
@@ -153,13 +172,15 @@ public class ExpenseMasterApplication extends Application {
 	private static void writeExpense(JsonWriter writer, Expense e) throws IOException {
 		writer.beginObject(); // new Expense
 		writer.name("expense_name").value(e.getName());
-		writer.name("currency").value(e.getValue().getCurrencyType().getSymbol());
+		writer.name("currency").value(e.getValue().getCurrencyType().getCurrencyCode());
 		writer.name("amount").value(e.getValue().toValueString());
+		writer.name("date").value(e.getDate().getTime());
 		writer.endObject(); // end Expense
 	}
 
 	private static void loadFromFile(Context ctx) {
 		// If the file exists, try to read it.
+		claims = new ArrayList<Claim>();
 		try {
 			FileInputStream fis = ctx.openFileInput(FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -177,24 +198,23 @@ public class ExpenseMasterApplication extends Application {
 			}
 			
 			fis.close();
+			Toast.makeText(ctx, "Loaded from file.", Toast.LENGTH_SHORT).show();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(ctx, "Failed to write: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(ctx, "Failed to write: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Toast.makeText(ctx, "Failed to write: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
 	
 	private static void saveToFile(Context ctx) {
 		try {
+			Toast.makeText(ctx, "Saving...", Toast.LENGTH_SHORT).show();
 			// Need a context because we are calling in context free environment
 			FileOutputStream fos = ctx.openFileOutput(FILENAME, 0);
 			OutputStreamWriter out = new OutputStreamWriter(fos);
@@ -213,10 +233,13 @@ public class ExpenseMasterApplication extends Application {
 			//out.flush();
 			fos.close();
 			Toast.makeText(ctx, "Saved!", Toast.LENGTH_SHORT).show();
+		// Hopefully this never happens
 		} catch (FileNotFoundException e) {
+			Toast.makeText(ctx, "File not found.", Toast.LENGTH_SHORT).show();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			Toast.makeText(ctx, "Saving failed.", Toast.LENGTH_SHORT).show();
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

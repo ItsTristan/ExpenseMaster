@@ -32,11 +32,13 @@ public class Claim extends EMModel implements Comparable<Claim> {
 		this("", ClaimStatus.IN_PROGRESS, new Date(), null);
 	}
 
-	public void addExpense(Expense e) {
+	public int addExpense(Expense e) {
 		if (! expenses.contains(e)) {
 			expenses.add(e);
 			notifyViews();
 		}
+		// If the expense was added previously, still return the expense position.
+		return expenses.indexOf(e);
 	}
 	
 	public void deleteExpense(Expense e) {
@@ -130,6 +132,11 @@ public class Claim extends EMModel implements Comparable<Claim> {
 	
 	public int getExpenseCount() {
 		return expenses.size();
+	}
+
+	public ArrayList<Expense> getExpenseList() {
+		// TODO Auto-generated method stub
+		return expenses;
 	}
 }
 
