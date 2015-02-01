@@ -1,11 +1,11 @@
 Requirements
 ============
 Expenses
-- [ ] add individual expense items
+- [X] add individual expense items
   * Adding and removing will be similar to claims.
-- [ ] edit individual expense items
+- [X] edit individual expense items
   * Saving the changes requires calling updateClaim
-- [ ] delete individual expense items
+- [X] delete individual expense items
 
 Claims
 - [X] add individual claims
@@ -27,7 +27,7 @@ Status
 Claims Listing
 - [X]   indicating name
 - [X]   indicating status
-- [ ]   ordered by start date
+- [X]   ordered by start date
   * List just needs to be sorted before update.
 - [X]   show total currency amounts for a claim when it is listed
 
@@ -52,8 +52,8 @@ Consistency
   * Add android:hint to fields
   * Date parsing through SimpleDateFormat is weak at best.
     * Allows dates such as 123/45/67 to be entered validly.
-    * Might need a stronger format than yyyy/mm/dd.
-      * Date may need a stronger format for de/serialization
+     * This can probably be ignored if we include hints.
+    * Date may need a stronger format for de/serialization (fixed)
 
 Completeness
 ============
