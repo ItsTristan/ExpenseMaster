@@ -45,10 +45,6 @@
             <intent-filter>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SendEmailActivity"
-            android:label="@string/title_activity_send_email" >
-        </activity>
     </application>
 
 </manifest>
