@@ -23,7 +23,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	private TextView claim_name;
 	private TextView claim_date;
 	private Spinner claim_status;
-	private ListView expenses_summary;
+	private ListView expenses_summary_list;
 	private Button edit_claim;
 	
 	private boolean isFirstSelection;
@@ -40,7 +40,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
         
 		claim_name = (TextView) findViewById(R.id.claim_name_text);
 		claim_date = (TextView) findViewById(R.id.claim_date_text);
-		expenses_summary = (ListView) findViewById(R.id.expense_summary_list);
+		expenses_summary_list = (ListView) findViewById(R.id.expense_summary_list);
 
 		// == Edit Claim ==
 		// Flag for skipping saves on spinner initialization
@@ -57,7 +57,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
         		Intent intent = new Intent(ClaimSummaryActivity.this, EditClaimActivity.class);
         		
                 // Pass list index through intent
-        		intent.putExtra("position", getIntent().getIntExtra("position", -2));
+        		intent.putExtra("claim_position", getIntent().getIntExtra("claim_position", -2));
         		
         		// Activity is responsible for the update
         		startActivityForResult(intent, RequestCode.REQUEST_EDIT_CLAIM);
@@ -102,11 +102,13 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		position = getIntent().getIntExtra("position", -2);
+		position = getIntent().getIntExtra("claim_position", -1);
 		// Throws a runtime error if position is invalid.
+		// We should never get a claim position of -1, since that
+		// would imply we came here from somewhere other than 
+		// a list view (or anything else with an index)
 		claim = ExpenseMasterApplication.getClaim(position);
         claim.addView(this);
-        expense_summary = claim.getExpenseSummary();
 		
 		// Associate spinner with claim status enum
 		spinner_adapter = new ArrayAdapter<ClaimStatus>(this, android.R.layout.simple_spinner_item, ClaimStatus.values());
@@ -114,13 +116,13 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 		claim_status.setAdapter(spinner_adapter);
 		
 		// Adapter updates to match money summary.
+		expense_summary = claim.getExpenseSummary();
 		adapter = new ArrayAdapter<Money>(this, R.layout.list_item, 
 				expense_summary);
-		expenses_summary.setAdapter(adapter);
-		
-		updateTextViews();
-		updateSummaryList();
-		updateStatusViews();
+		expenses_summary_list.setAdapter(adapter);
+
+		update(claim);
+
 	}
 
 	@Override
@@ -135,9 +137,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	public void update(Claim model) {
 		updateTextViews();
 		updateSummaryList();		
-		
-		// Update ListView
-		adapter.notifyDataSetChanged();
+		updateStatusViews();
 	}
 	
 	private void updateTextViews() {
@@ -147,7 +147,7 @@ public class ClaimSummaryActivity extends Activity implements EMView {
 	}
 	
 	private void updateSummaryList() {
-		// Update summary array first
+		// Force update of array
 		expense_summary = claim.getExpenseSummary();
 		adapter.notifyDataSetChanged();
 	}

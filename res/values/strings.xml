@@ -25,15 +25,19 @@
     
     <string name="claim_placeholder_string">&lt;Claim Name&gt;</string>
     
+    <!-- Button prompts -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     
+    <!--  Claim prompts -->
     <string name="claim_name_prompt">Claim Name:</string>
     <string name="claim_status_prompt">Status:</string>
     <string name="claim_start_date_prompt">Start Date:</string>
     <string name="claim_end_date_prompt">End Date:</string>
     <string name="claim_date_prompt">Date:</string>
+    <string name="expense_summary_prompt">Totals:</string>
 
+    <!-- Expense prompts -->
     <string name="expense_name_prompt">Expense Name:</string>
     <string name="expense_date_prompt">Date:</string>
     <string name="expense_amount_prompt">Amount:</string>
@@ -43,6 +47,7 @@
     <string name="app_edit_expense">Edit Expense</string>
     <string name="email_claim_string">Email Claim</string>
     
+    <!-- Status -->
     <string name="status_in_progress">In Progress</string>
     <string name="status_submitted">Submitted</string>
     <string name="status_returned">Returned</string>

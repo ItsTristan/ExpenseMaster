@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
             	// Make a request for a new claim through an activity
         		Intent intent = new Intent(MainActivity.this, EditClaimActivity.class);
+        		// Does not pass a list position because it's a new claim.
         		startActivityForResult(intent, RequestCode.REQUEST_NEW_CLAIM);
         		
             }
@@ -51,7 +52,7 @@ public class MainActivity extends Activity {
         		Intent intent = new Intent(MainActivity.this, ClaimSummaryActivity.class);
         		
                 // Pass list index through intent
-        		intent.putExtra("position", position);
+        		intent.putExtra("claim_position", position);
 
         		// Activity is responsible for the update
         		startActivityForResult(intent, RequestCode.REQUEST_CLAIM_SUMMARY);
@@ -62,29 +63,43 @@ public class MainActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				// On long click, delete
-				// http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
-				//  Creates the alert dialog and immediately discards after displaying
-				
 				// position is set to final so that the delegate doesn't
 				// complain about position changing in the outer body.
-				new AlertDialog.Builder(MainActivity.this)
-			    	.setTitle("Delete entry")
-			    	.setMessage("Are you sure you want to delete this entry?")
-			    	.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-			    		public void onClick(DialogInterface dialog, int which) { 
-				    		// Delete claim
-			            	ExpenseMasterApplication.deleteClaim(MainActivity.this, position);
-							updateDisplay();
-			    		}
-			    	})
-			    	.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-			    		public void onClick(DialogInterface dialog, int which) { 
-			    			// do nothing
-			    		}
-			    	})
-			    	.setIcon(android.R.drawable.ic_dialog_alert)
-			    	.show();
+				// FIXME The Id from claims_list isn't pointing to the right
+				//		 object. Because of this, we have to ensure that
+				//		 the list in the adapter is sync'd with the one in
+				//		 the application at all times.
+				Claim c = ExpenseMasterApplication.getClaim(position);
+				
+				// If APPROVED or SUBMITTED, don't allow delete
+				if (c.getStatus() == ClaimStatus.APPROVED || c.getStatus() == ClaimStatus.SUBMITTED) {
+					// Notify and don't consume the hold so it can be edited.
+					Toast.makeText(MainActivity.this, "Claim cannot be deleted (already " + 
+							c.getStatus().toString() +")", Toast.LENGTH_SHORT).show();
+					return false;
+				} else {
+					// Display alert for delete
+					// http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+					//  Creates the alert dialog and immediately discards after displaying
+					new AlertDialog.Builder(MainActivity.this)
+				    	.setTitle("Delete entry")
+				    	.setMessage("Are you sure you want to delete this entry?")
+				    	.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				    		public void onClick(DialogInterface dialog, int which) { 
+					    		// Delete claim using position (see note above)
+				            	ExpenseMasterApplication.deleteClaim(MainActivity.this, 
+				            			position);
+								updateDisplay();
+				    		}
+				    	})
+				    	.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				    		public void onClick(DialogInterface dialog, int which) { 
+				    			// do nothing
+				    		}
+				    	})
+				    	.setIcon(android.R.drawable.ic_dialog_alert)
+				    	.show();
+				}
 				
 				// Consume the long click
 				return true;

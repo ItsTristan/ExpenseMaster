@@ -5,22 +5,31 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="17"
        android:targetSdkVersion="17" /><application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme" android:name="ExpenseMasterApplication">
-        <activity android:name=".MainActivity" android:label="@string/app_name">
+        <activity android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
-        <activity android:name=".EditClaimActivity" android:label="@string/app_edit_claim">
+        <activity android:name=".EditClaimActivity"
+            android:label="@string/app_edit_claim"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter></intent-filter>
         </activity>
-        <activity android:label="@string/app_claim_summary" android:name=".ClaimSummaryActivity">
+        <activity android:label="@string/app_claim_summary"
+            android:name=".ClaimSummaryActivity"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter></intent-filter>
         </activity>
-        <activity android:label="@string/app_edit_expense" android:name=".EditExpenseActivity">
+        <activity android:label="@string/app_edit_expense"
+            android:name=".EditExpenseActivity"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter></intent-filter>
         </activity>
     </application>

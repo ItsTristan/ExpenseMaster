@@ -13,8 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:labelFor="@+id/expense_name_text"
         android:text="@+string/expense_name_prompt"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/expense_name_text"
         android:text="@+string/expense_date_prompt"
+        android:labelFor="@+id/expense_date_text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -42,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/expense_date_prompt"
+        android:hint="@string/date_hint"
         android:inputType="date"
         android:ems="10" />
 
@@ -51,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/expense_date_text"
         android:text="@+string/expense_amount_prompt"
+        android:labelFor="@+id/expense_amount_text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -59,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/expense_amount_prompt"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal|numberSigned" />
 
     <TextView
         android:id="@+id/expense_currency_type_prompt"
@@ -67,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/expense_amount_text"
         android:text="@+string/expense_currency_type_prompt"
+        android:labelFor="@+id/currency_type_spinner"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
