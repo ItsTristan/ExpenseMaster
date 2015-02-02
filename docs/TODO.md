@@ -76,7 +76,7 @@ Code base
 
 Documentation
 -------------
-- [ ] Each class indicates its purpose, rationale, and issues
+- [X] Each class indicates its purpose, rationale, and issues
 - [X] Includes UML class diagrams
 
 UML
@@ -88,7 +88,7 @@ UML
 Demonstration
 -------------
 - [X] Two minute maximum video demonstrating required functionality
-  * Need to find a place to submit it
+  * Need to find a place to submit it (currently in the /docs/ folder as a blob).
 
 Submission
 ==========
