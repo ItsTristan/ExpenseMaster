@@ -25,6 +25,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class models a Claim object.
+ * Methods help manage its own attributes, expenses
+ * contained within it, and display information.
+ *  
+ */
 public class Claim extends EMModel implements Comparable<Claim>, SubtextListable {
 	
 	private String name;

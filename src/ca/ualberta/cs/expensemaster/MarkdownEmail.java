@@ -18,16 +18,18 @@
 
 package ca.ualberta.cs.expensemaster;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Stack;
+
 import android.content.Intent;
 
 public class MarkdownEmail extends EmailMessage {
-	private int listNumber = 1;
-	private int listDepth = 1;
+	private Stack<Integer> listStack;
 	
 	public MarkdownEmail(String address, String subject) {
 		super(address, subject);
-		listNumber = 1;
-		listDepth = 1;
+		listStack = new Stack<Integer>();
 	}
 	
 	public void putH1(String text) {
@@ -44,9 +46,14 @@ public class MarkdownEmail extends EmailMessage {
 		repeat("#", depth);
 		body.append(" " + text + "\n");
 	}
-	public void putQuote(String text, int depth) {
-		repeat("> ", depth);
-		put(text + "\n");
+	@Override
+	public void newList() {
+		setNumberedList(null);
+	}
+
+	@Override
+	public void newNumberedList() {
+		setNumberedList(1);
 	}
 
 	public void putListItem(String text) {
@@ -58,30 +65,102 @@ public class MarkdownEmail extends EmailMessage {
 		put("*\t" + text);
 	}
 	
-	public void setNumberedList(int start, int depth) {
-		listDepth = depth;
-		listNumber = start;
+	private void setNumberedList(Integer start) {
+		// Nested lists are managed by a stack.
+		// start = null indecates an unordered list
+		listStack.push(start);
 	}
+
 	public void putNumberedListItem(String text) {
-		repeat("\t", listDepth);
-		put((listNumber++) + "\t" + text);
+		repeat("\t", listStack.size());
+		// Get the numbering value at the end of the stack
+		int last = listStack.size() - 1;
+		Integer list_number = listStack.get(last);
+		// Put the list item in
+		put(list_number + ".\t" + text);
+		listStack.set(last, list_number + 1);
 	}
-	
+
+	@Override
+	public void endList() {
+		listStack.pop();
+	}
+
+	public void putQuote(String text, int depth) {
+		repeat("> ", depth);
+		put(text + "\n");
+	}
+
+	@Override
+	public void putQuote(String text) {
+		if (text.contains("\n")) {
+			// block quote
+			for (String line : text.split("\n")) {
+				put("> " + line);
+			}
+		} else {
+			put("> " + text);
+		}
+	}
+
 	public void putHorizontalRule() {
-		puthorizontalRule("- ");
+		putHorizontalRule("- ");
 	}
-	public void puthorizontalRule(String style) {
+
+	public void putHorizontalRule(String style) {
 		if (!style.isEmpty())
 			repeat(style, 60 / style.length());
 		body.append("\n");
 	}
-	
+
 	private void repeat(String text, int numTimes) {
 		for (int i = 0; i < numTimes; i++)
 			body.append(text);
 	}
 	
-	
+	@Override
+	public void writeClaim(Claim c) throws IOException {
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		// Put in some boring details...
+		putH1(c.getName());
+		put("Start Date: " + df.format(c.getStartDate()));
+		if (c.getEndDate() != null)
+			put("End Date: " + df.format(c.getEndDate()));
+		put(""); // Insert a gap
+
+		if (c.getExpenseCount() > 0) {
+			// Put a big ol' summary in there
+			putH2("Total Value");
+			for (Money m : c.getExpenseSummary()) {
+				putListItem(m.toString());
+			}
+			put("");
+		
+			// Throw in the details about all of the expenses.
+			putH2("Details");
+			put("(Dates are in " + df.toPattern() + " format)\n");
+			for (Expense e : c.getExpenseList()) {
+				writeExpense(e);
+			}
+			put("");
+		} else {
+			putParagraph("No expenses to list.");
+		}
+	}
+
+	@Override
+	public void writeExpense(Expense e) throws IOException {
+		put(e.getName());
+		newList();
+		{
+			putListItem("Amount: " + e.getValue().toString());
+			putListItem("Date: " + 
+					ExpenseMasterApplication.global_date_format.format(e.getDate()));
+		}
+		endList();
+		put("");
+	}
+
 	@Override
 	protected Intent getMessageIntent() {
 		Intent intent = new Intent(Intent.ACTION_SEND);

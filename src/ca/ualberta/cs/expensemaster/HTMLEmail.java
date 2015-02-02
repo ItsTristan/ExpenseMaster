@@ -18,6 +18,8 @@
 
 package ca.ualberta.cs.expensemaster;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Stack;
 
 import android.content.Intent;
@@ -35,6 +37,7 @@ public class HTMLEmail extends EmailMessage {
 
 		tagStack = new Stack<String>();
 		startTag("html");
+		startTag("body");
 	}
 	
 	// Tag starters
@@ -59,6 +62,10 @@ public class HTMLEmail extends EmailMessage {
 	public void putParagraph(String data) {
 		putTag("p", data);
 	}
+	@Override
+	public void put(String text) {
+		body.append(text);
+	}
 	public void putTag(String tag, String data) {
 		startTag(tag);
 		put(data);
@@ -70,15 +77,105 @@ public class HTMLEmail extends EmailMessage {
 	public void putSmallTag(String tag) {
 		put("<" + tag + " />");
 	}
-	/**
-	 * Puts string data in directly. This should basically
-	 * never be used.
-	 * @param data
-	 */
-	public void putDirect(String data) {
-		put(data);
+
+	@Override
+	public void putListItem(String text) {
+		putTag("li", text);
 	}
-	
+
+	@Override
+	public void putNumberedListItem(String text) {
+		putTag("li", text);
+	}
+
+	@Override
+	public void putHeader(String text, int depth) {
+		putTag("h"+depth, text);
+	}
+
+	@Override
+	public void putH1(String text) {
+		putTag("h1", text);
+	}
+
+	@Override
+	public void putH2(String text) {
+		putTag("h2", text);
+	}
+
+	@Override
+	public void putQuote(String text) {
+		if (text.contains("\n")) {
+			putTag("blockquote", text);
+		} else {
+			putTag("q", text);
+		}
+	}
+
+	@Override
+	public void putHorizontalRule() {
+		putSmallTag("hr");
+	}
+
+	@Override
+	public void newList() {
+		startTag("ul");
+	}
+
+	@Override
+	public void newNumberedList() {
+		startTag("ol");
+	}
+
+	@Override
+	/**
+	 * This function should be called in the correct stack order.
+	 */
+	public void endList() {
+		endTag();
+	}
+
+	@Override
+	public void writeClaim(Claim c) throws IOException {
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		startTag("p");
+		// Write data about this claim
+		putH1(c.getName());
+		putTag("br", c.getStatus().toString());
+		putTag("br", "Start Date: " + df.format(c.getStartDate()));
+		if (c.getEndDate() != null) {
+			putTag("br", "End Date: " + df.format(c.getEndDate()));
+		}
+		if (c.getExpenseCount() > 0) {
+			// List the summary totals
+			putH2("Total Value");
+			// Not using lists here because most of
+			// HTML gets stripped out of email clients
+			for (Money m : c.getExpenseSummary()) {
+				putTag("br", m.toString());
+			}
+			
+			// List all of the expenses
+			putH2("Details");
+			putParagraph("(Dates are in " + 	df.toPattern() + " format)");
+			for (Expense e : c.getExpenseList()) {
+				writeExpense(e);
+			}
+		} else {
+			putParagraph("No expenses to list.");
+		}
+		endTag();
+	}
+
+	@Override
+	public void writeExpense(Expense e) throws IOException {
+		putHeader(e.getName(), 3);
+		
+		putTag("br", "Amount: " + e.getValue().toString());
+		putTag("br", "Date: " + 
+				ExpenseMasterApplication.global_date_format.format(e.getDate()));
+	}
+
 	@Override
 	public Intent getMessageIntent() {
 		if (isOpen()) {
@@ -93,4 +190,5 @@ public class HTMLEmail extends EmailMessage {
 		intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body.toString()));
 		return intent;
 	}
+
 }

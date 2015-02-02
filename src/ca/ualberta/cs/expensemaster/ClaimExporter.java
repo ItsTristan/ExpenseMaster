@@ -21,6 +21,9 @@ package ca.ualberta.cs.expensemaster;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Interface for objects that intend to export claim data.
+ */
 public interface ClaimExporter {
 	public void writeClaim(Claim c) throws IOException;
 	public void writeExpense(Expense e) throws IOException;

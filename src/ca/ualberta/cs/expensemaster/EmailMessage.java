@@ -18,20 +18,36 @@
 
 package ca.ualberta.cs.expensemaster;
 
+import java.io.IOException;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 
-/* This class was built so that emails could be sent in HTML,
+/** This class was built so that emails could be sent in HTML,
  * ...but it turns out Android doesn't support HTML and MIME very well,
  * as well as too many clients (c'mon, what year is it anyway?!).
  */
-public abstract class EmailMessage { 
+public abstract class EmailMessage implements ClaimExporter { 
 	protected String address;
 	protected String subject;
 	protected StringBuilder body;
 	
 	// implementation details
 	private boolean open;
+	
+	// Contractual obligations
+	public abstract void newList();
+	public abstract void putListItem(String text);
+	public abstract void newNumberedList();
+	public abstract void putNumberedListItem(String text);
+	public abstract void endList();
+	
+	public abstract void putHeader(String text, int depth);
+	public abstract void putH1(String text);
+	public abstract void putH2(String text);
+	public abstract void putQuote(String text);
+	public abstract void putHorizontalRule();
 
 	public EmailMessage(String address, String subject) {
 		super();
@@ -72,13 +88,23 @@ public abstract class EmailMessage {
 		}
 		ctx.startActivity(Intent.createChooser(getMessageIntent(), "Send Email"));
 	}
+
+	/**
+	 * Implementation from the ClaimExporter interface
+	 */
+	@Override
+	public void writeAll(List<Claim> claims) throws IOException {
+		for (Claim c : claims) {
+			writeClaim(c);
+		}
+	}
 	
 	/**
-	 * This is hidden from the user but is called after the state
-	 * is validated. It should open the email client in the end.
-	 * The purpose of this is to give a last chance to change
-	 * subject, address, or body/body type before the message is sent.
-	 * @param ctx
+	 * This class must be overridden by the child class. This
+	 * function gets called after the message has validated
+	 * its state. You are expected to return an intent
+	 * that appropriately sets up the message to be emailed,
+	 * and the super class will start the activity.
 	 */
 	protected abstract Intent getMessageIntent();
 }
