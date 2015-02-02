@@ -29,7 +29,7 @@ relative to the root.
 This project was built in Eclipse Luna, compliant with JDK 1.8, and targets the Android SDK Level 17 (Android 4.2.2). See **Requirements** above for information about libraries and components that might not be included in the repository.
 
 ## Documentation
-A demo video and a basic UML diagram is available [here](https://archive.org/details/tmeleshk_ualberta_Demo), as well as in the /docs/ directory.
+A demo video and a basic UML diagram is available on [archive.org](https://archive.org/details/tmeleshk_ualberta_Demo), as well as in the [/docs/](https://github.com/ItsTristan/ExpenseMaster/tree/master/docs) directory.
 All other docs are currently in the source code itself.
 
 ## License
