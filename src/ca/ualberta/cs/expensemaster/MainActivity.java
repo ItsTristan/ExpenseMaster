@@ -132,16 +132,14 @@ public class MainActivity extends Activity implements EMView<ClaimsList> {
         });
         
 		adapter = new SubTextAdapter<Claim>(this, R.layout.list_item, 
-				ExpenseMasterApplication.getClaimsList(this));
+				ExpenseMasterApplication.getClaims(this));
 
+		// Sanity checks
         if (adapter == null) {
         	throw new RuntimeException("adapter list not initialized");
         }
         if (claims_list == null) {
         	throw new RuntimeException("claims list not initialized");
-        }
-        if (ExpenseMasterApplication.getClaimsList(this) == null) {
-        	throw new RuntimeException("Class failed");
         }
 
         claims_list.setAdapter(adapter);

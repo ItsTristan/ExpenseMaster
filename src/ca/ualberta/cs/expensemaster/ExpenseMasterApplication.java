@@ -48,18 +48,22 @@ import android.widget.Toast;
  */
 public class ExpenseMasterApplication extends Application {
 	private static final String FILENAME = "save.dat";
-	private transient static ClaimsList claims;
-
+	private static ClaimsList claims;
+	
 	// This date format is to be consistent across all dates
 	public static final SimpleDateFormat global_date_format = new SimpleDateFormat(
 			"yyyy-MM-dd", Locale.CANADA);
 
-	public static ArrayList<Claim> getClaimsList(Context ctx) {
+	public static ClaimsList getClaimsList(Context ctx) {
 		if (claims == null) {
 			claims = new ClaimsList();
 			loadFromFile(ctx);
 		}
-		return claims.getClaims();
+		return claims;
+	}
+	
+	public static ArrayList<Claim> getClaims(Context ctx) {
+		return getClaimsList(ctx).getClaims();
 	}
 	
 	/*
@@ -82,24 +86,24 @@ public class ExpenseMasterApplication extends Application {
 	 * @return The index of the newly added claim.
 	 */
 	public static int addClaim(Context ctx, Claim c) {
-		claims.add(c);
+		getClaimsList(ctx).add(c);
 		saveToFile(ctx);
-		return claims.findClaim(c);
+		return getClaimsList(ctx).findClaim(c);
 	}
 
 	public static void deleteClaim(Context ctx, Claim c) {
-		claims.remove(c);
+		getClaimsList(ctx).remove(c);
 		saveToFile(ctx);
 	}
 
 	public static void deleteClaim(Context ctx, int index) {
 		// May throw an OOB exception if the caller doesn't validate.
-		claims.remove(index);
+		getClaimsList(ctx).remove(index);
 		saveToFile(ctx);
 	}
 
 	public static void updateClaim(Context ctx, int index, Claim c) {
-		claims.update(index, c);
+		getClaimsList(ctx).update(index, c);
 		saveToFile(ctx);
 	}
 

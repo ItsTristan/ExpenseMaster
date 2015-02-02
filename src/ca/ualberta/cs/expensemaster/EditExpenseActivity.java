@@ -218,7 +218,9 @@ public class EditExpenseActivity extends Activity {
 		// is invalid, even though Money can handle it itself.
 		
 		if (name == null || name.isEmpty()) {
-			Toast.makeText(this, "Name cannot be left blank", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (date == null) {
 			return false;
 		}
 		
@@ -259,6 +261,11 @@ public class EditExpenseActivity extends Activity {
 	 */
 	private String getExpenseName() {
 		EditText text = (EditText) findViewById(R.id.expense_name_text);
+		if (text.getText().toString().isEmpty()) {
+			// Nothing entered
+			Toast.makeText(this, "Name cannot be left blank", Toast.LENGTH_SHORT).show();
+			return null;
+		}
 		return text.getText().toString();
 	}
 
@@ -279,10 +286,19 @@ public class EditExpenseActivity extends Activity {
 	
 	private Date getExpenseDate() {
 		EditText text = (EditText) findViewById(R.id.expense_date_text);
+		if (text.getText().toString().isEmpty()) {
+			// No data
+			Toast.makeText(this, "Date cannot be left blank.",
+					Toast.LENGTH_SHORT).show();
+			return null;
+		}
 		try {
 			return ExpenseMasterApplication.global_date_format.parse(text.getText().toString());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			// Invalid parsing
+			Toast.makeText(this, "Date must be in format " +
+					ExpenseMasterApplication.global_date_format.toPattern(),
+					Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
 		}
 		return null;

@@ -193,7 +193,6 @@ public class EditClaimActivity extends Activity {
 		super.onResume();
 		if (needs_save) {
 			saveClaim();
-			needs_save = false;
 		}
 	}
 
@@ -236,12 +235,24 @@ public class EditClaimActivity extends Activity {
 	}
 
 	private String getClaimName() {
+		if (claim_name.getText().toString().isEmpty()) {
+			Toast.makeText(EditClaimActivity.this,
+					"Name cannot be left blank.",
+					Toast.LENGTH_SHORT).show();
+			return null;
+		}
 		return claim_name.getText().toString().trim();
 	}
 	
 	private Date getClaimStartDate() {
 		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
-		
+
+		if (claim_start_date.getText().toString().isEmpty()) {
+			Toast.makeText(EditClaimActivity.this,
+					"Start Date cannot be left blank.",
+					Toast.LENGTH_SHORT).show();
+			return null;
+		}
 		// Try to convert start date to real date using default format
 		try {
 			return df.parse(claim_start_date.getText().toString());
@@ -288,15 +299,9 @@ public class EditClaimActivity extends Activity {
 		
 		// Require name must be filled.
 		if (name == null || name.isEmpty()) {
-			Toast.makeText(EditClaimActivity.this,
-					"Name cannot be left blank.",
-					Toast.LENGTH_SHORT).show();
 			return false;
 		// Require start date to be filled
 		} else if (startDate == null) {
-			Toast.makeText(EditClaimActivity.this,
-					"Start Date cannot be left blank.",
-					Toast.LENGTH_SHORT).show();
 			return false;
 			
 		} else {
@@ -322,6 +327,7 @@ public class EditClaimActivity extends Activity {
 		
 		// Update views to match
 		setupViews();
+		needs_save = false;
 		return true;
 	}
 	
