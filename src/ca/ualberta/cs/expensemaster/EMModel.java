@@ -20,6 +20,13 @@ package ca.ualberta.cs.expensemaster;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents an abstract entity model
+ * for a Model-View design pattern.
+ *  
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public abstract class EMModel {
 	private final ArrayList<EMView> views;
 	

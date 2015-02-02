@@ -22,6 +22,13 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * This class represents an Expense. It cannot exist
+ * without a Claim object attached to it.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class Expense extends EMModel implements SubtextListable {
 	private String name;
 	private Date date;

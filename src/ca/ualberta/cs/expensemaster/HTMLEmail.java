@@ -25,9 +25,15 @@ import java.util.Stack;
 import android.content.Intent;
 import android.text.Html;
 
-/* This class was built so that emails could be sent in HTML,
+/**
+ *  This class was built so that emails could be sent in HTML,
  * ...but it turns out Android doesn't support HTML and MIME very well,
  * as well as too many clients (c'mon, what year is it anyway?!).
+ * It extends the EmailMessage class to give a structure to
+ * the message.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ * 
  */
 public class HTMLEmail extends EmailMessage { 
 	private Stack<String> tagStack;

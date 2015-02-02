@@ -25,24 +25,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-// Heavily adapted from
-// http://www.softwarepassion.com/android-series-custom-listview-items-and-adapters/
-//   Jan 31, 2015
-// It might be better to extend a BaseAdapter here, but for straight-forward
-// substitution reasons, I'm extending ArrayAdapter here.
-// 
+
 /**
  * A prettier looking array adapter that allows subtext in listviews.
+ * This class requires an object T that implements the SubtextListable
+ * interface. It puts the object's getText() call result to the 
+ * main text and getSubText() to the text underneath. 
  *
- * @param <T>
+ * Issues:
+ * It might be better to use a {@link BaseAdapter} instead of an
+ * {@link ArrayAdapter} because it reduces the amount of work
+ * we need to do. For now, an ArrayAdapter is fine.
+ *  
+ *  Heavily adapted from
+ *  http://www.softwarepassion.com/android-series-custom-listview-items-and-adapters/
+ *    Jan 31, 2015
+ *  It might be better to extend a BaseAdapter here, but for straight-forward
+ *  substitution reasons, I'm extending ArrayAdapter here.
+ *
+ * @author ItsTristan (Tristan Meleshko)
+ * @param <T> 
  */
-
 public class SubTextAdapter<T extends SubtextListable> extends ArrayAdapter<T> {
 	private ArrayList<T> items;
-
-
 	/**
 	 * ViewHolder patterns are more efficient then calling findById
 	 * for every list item every time we want to update the list.

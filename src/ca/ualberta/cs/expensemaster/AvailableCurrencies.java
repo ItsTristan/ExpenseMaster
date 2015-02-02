@@ -25,9 +25,11 @@ import java.util.Currency;
  * 	 https://developers.google.com/adsense/management/appendix/currencies
  * 
  * Sane people using android API 19 should use Currency.getAvailableCurrencies()
- * rather than building giant enums from CSVs.
+ * rather than building giant enums or reading from CSVs.
  * 
  * Jan 30, 2015
+ * 
+ * @author ItsTristan (Tristan Meleshko)
  */
 public enum AvailableCurrencies {
 	AED("United Arab Emirates Dirham"),

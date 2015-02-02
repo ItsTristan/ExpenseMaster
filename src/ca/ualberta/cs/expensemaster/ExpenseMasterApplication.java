@@ -33,6 +33,19 @@ import android.app.Application;
 import android.content.Context;
 import android.widget.Toast;
 
+/** 
+ * 
+ * This is the global Application object. It currently
+ * acts as a bridge between the ClaimsList object and
+ * the outside world.
+ * 
+ * Issues:
+ * Bridging functions should be removed. Most classes
+ * reference these actions.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class ExpenseMasterApplication extends Application {
 	private static final String FILENAME = "save.dat";
 	private transient static ClaimsList claims;

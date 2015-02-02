@@ -35,6 +35,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+/**
+ * Activity to edit individual expenses for a given claim.
+ * It must receive a valid claim index (relative to ClaimsList)
+ * and an expense index (relative to the Claim). If expense index
+ * is -1, it is treated as a new expense.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class EditExpenseActivity extends Activity {
 	private static Claim claim;	// Claim to be edited
 	private static int claim_position; // Its position in the expense list

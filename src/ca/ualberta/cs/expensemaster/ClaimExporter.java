@@ -23,6 +23,8 @@ import java.util.List;
 
 /**
  * Interface for objects that intend to export claim data.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
  */
 public interface ClaimExporter {
 	public void writeClaim(Claim c) throws IOException;

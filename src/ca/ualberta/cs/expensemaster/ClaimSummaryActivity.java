@@ -34,6 +34,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/**
+ * Activity to display a summary of a claim, allows
+ * editing of a claim, and emailing of an individual claim.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class ClaimSummaryActivity extends Activity implements EMView<Claim> {
 	private int position = -2;
 	private Claim claim;

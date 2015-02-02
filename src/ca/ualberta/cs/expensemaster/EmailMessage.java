@@ -24,9 +24,13 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 
-/** This class was built so that emails could be sent in HTML,
- * ...but it turns out Android doesn't support HTML and MIME very well,
- * as well as too many clients (c'mon, what year is it anyway?!).
+/** 
+ * This class represents a generic email message. It is
+ * abstract because it doesn't specify a specific format.
+ * It implements ClaimExporter, but that may change in the
+ * future if emails are required for other things.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
  */
 public abstract class EmailMessage implements ClaimExporter { 
 	protected String address;

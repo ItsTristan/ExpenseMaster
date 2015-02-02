@@ -24,6 +24,11 @@ import java.util.Stack;
 
 import android.content.Intent;
 
+/** 
+ * MarkdownEmail is an alternative to the HTMLEmail
+ * class, because HTML breaks in all email clients and
+ * android doesn't make it any easier.
+ */
 public class MarkdownEmail extends EmailMessage {
 	private Stack<Integer> listStack;
 	

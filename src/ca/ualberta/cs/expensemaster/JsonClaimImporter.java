@@ -28,6 +28,12 @@ import java.util.List;
 
 import android.util.JsonReader;
 
+/**
+ * Deserializer for saved data.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class JsonClaimImporter implements ClaimImporter {
 	private JsonReader reader;
 	public JsonClaimImporter(Reader in) {

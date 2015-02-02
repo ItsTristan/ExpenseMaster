@@ -30,6 +30,7 @@ import java.util.Map;
  * Methods help manage its own attributes, expenses
  * contained within it, and display information.
  *  
+ * @author ItsTristan (Tristan Meleshko)
  */
 public class Claim extends EMModel implements Comparable<Claim>, SubtextListable {
 	
@@ -57,6 +58,11 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 		this("", ClaimStatus.IN_PROGRESS, new Date(), null);
 	}
 
+	@Override
+	public int compareTo(Claim another) {
+		return this.getStartDate().compareTo(another.getStartDate());
+	}
+
 	public int addExpense(Expense e) {
 		if (! expenses.contains(e)) {
 			expenses.add(e);
@@ -77,19 +83,46 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 		return expenses.get(index);
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 		notifyViews();
 	}
-	
+
+	public void setStatus(ClaimStatus status) {
+		this.status = status;
+		notifyViews();
+	}
+
+	public void setStartDate(Date start_date) {
+		this.start_date = start_date;
+		notifyViews();
+	}
+
+	public void setEndDate(Date end_date) {
+		this.end_date = end_date;
+		notifyViews();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ClaimStatus getStatus() {
+		return status;
+	}
+
+	public Date getStartDate() {
+		return start_date;
+	}
+
+	public Date getEndDate() {
+		return end_date;
+	}
+
 	public String toString() {
 		return getName() + "(" + start_date.getTime() + ")";
 	}
-	
+
 	public String getDateString() {
 		// Prints "<StartDate> - <EndDate>", or just "<StartDate>" if no end specified
 		if (end_date == null) {
@@ -100,39 +133,25 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 		}
 	}
 
-	public ClaimStatus getStatus() {
-		return status;
-	}
-	
-
-	public void setStatus(ClaimStatus status) {
-		this.status = status;
-		notifyViews();
-	}
-
-	public Date getStartDate() {
-		return start_date;
-	}
-
-	public void setStartDate(Date start_date) {
-		this.start_date = start_date;
-		notifyViews();
-	}
-
-	public Date getEndDate() {
-		return end_date;
-	}
-
-	public void setEndDate(Date end_date) {
-		this.end_date = end_date;
-		notifyViews();
+	@Override
+	public String getText() {
+		return name;
 	}
 
 	@Override
-	public int compareTo(Claim another) {
-		return this.getStartDate().compareTo(another.getStartDate());
+	public String getSubText() {
+		// Format text for subtext list view.
+		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
+		if (end_date != null) {
+			return "Status: " + status +
+			"\nStart Date: " + df.format(start_date) +
+			"\nEnd Date: " + df.format(end_date);
+		} else {
+			return "Status: " + status +
+			"\nStart Date: " + df.format(start_date);
+		}
 	}
-	
+
 	public ArrayList<Money> getExpenseSummary() {
 		ArrayList<Money> results = new ArrayList<Money>();
 		Map<Currency, Money> sums = new HashMap<Currency, Money>();
@@ -162,25 +181,6 @@ public class Claim extends EMModel implements Comparable<Claim>, SubtextListable
 
 	public ArrayList<Expense> getExpenseList() {
 		return expenses;
-	}
-
-	@Override
-	public String getText() {
-		return name;
-	}
-
-	@Override
-	public String getSubText() {
-		// Format text for subtext list view.
-		SimpleDateFormat df = ExpenseMasterApplication.global_date_format;
-		if (end_date != null) {
-			return "Status: " + status +
-			"\nStart Date: " + df.format(start_date) +
-			"\nEnd Date: " + df.format(end_date);
-		} else {
-			return "Status: " + status +
-			"\nStart Date: " + df.format(start_date);
-		}
 	}
 }
 

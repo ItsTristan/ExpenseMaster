@@ -18,9 +18,16 @@
 
 package ca.ualberta.cs.expensemaster;
 
-/*
+/**
+ * This activity allows editing of an individual claim.
+ * It must receive a claim index (relative to ClaimsList)
+ * to edit, or -1 for a new claim.
  * 
- * 
+ * Issues:
+ * Currently, there are problems with having data display
+ * when the screen locks as well as being able to save
+ * correctly. The current (minor) hack fixes both issues
+ * for now.
  */
 
 import java.text.ParseException;
@@ -217,6 +224,17 @@ public class EditClaimActivity extends Activity {
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		// Cancel without saving
+		super.onBackPressed();
+		Intent resultIntent = new Intent();
+		setResult(Activity.RESULT_CANCELED, resultIntent);
+		// Clean up so we get a new copy next time.
+		claim = null;
+		finish();
+	}
+
 	private String getClaimName() {
 		return claim_name.getText().toString().trim();
 	}
@@ -307,18 +325,7 @@ public class EditClaimActivity extends Activity {
 		return true;
 	}
 	
-	@Override
-	public void onBackPressed() {
-		// Cancel without saving
-		super.onBackPressed();
-		Intent resultIntent = new Intent();
-		setResult(Activity.RESULT_CANCELED, resultIntent);
-		// Clean up so we get a new copy next time.
-		claim = null;
-		finish();
-	}
-	
-	public void setupViews() {
+	private void setupViews() {
 		// Get the views in question
         claim_name = (EditText) findViewById(R.id.claim_name_text);
         claim_start_date = (EditText) findViewById(R.id.claim_start_date);

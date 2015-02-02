@@ -20,6 +20,19 @@ package ca.ualberta.cs.expensemaster;
 
 import android.content.Context;
 
+/**
+ * An enumeration that represents all of the possible statuses
+ * for a given claim.
+ * 
+ * Exports display items
+ * 
+ * Issues:
+ * Currently, this is English-only, because the R.string file
+ * is only accessible with a context.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public enum ClaimStatus {
 	IN_PROGRESS(R.string.status_in_progress),
 	SUBMITTED(R.string.status_submitted),

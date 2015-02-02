@@ -22,6 +22,16 @@ import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
 
+/**
+ * Money represents a generic unit of currency, managing
+ * the denomination size without a loss of precision.
+ * It uses whole and cents integers rather than using a
+ * BigDecimal object because BigDecimal was causing a lot
+ * of headache.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class Money {
 	
 	private int denom_size = 100;

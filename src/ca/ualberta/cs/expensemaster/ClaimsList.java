@@ -8,6 +8,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Extracted from the Application class file. This
+ * object manages a list of claims. Manages import
+ * and export of Claims by de/serializing Json
+ * via Gson. 
+ * 
+ * Issues:
+ * Currently, the application class acts as a bridge
+ * between this class and the world application.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ * 
+ */
 public class ClaimsList extends EMModel {
 	private static ArrayList<Claim> claims;
 	

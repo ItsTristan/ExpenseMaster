@@ -22,6 +22,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+/**
+ * Interface for objects that intend to import claim data.
+ *
+ * @author ItsTristan (Tristan Meleshko)
+ */
 public interface ClaimImporter {
 	public Claim readClaim() throws IOException, ParseException;
 	public Expense readExpense() throws IOException, ParseException;

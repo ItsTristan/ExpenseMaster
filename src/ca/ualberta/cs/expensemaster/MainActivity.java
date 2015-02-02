@@ -23,7 +23,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -34,6 +33,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * This is the first view that is displayed when the app
+ * is first opened. It displays a list of claims that can be
+ * viewed or edited.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class MainActivity extends Activity implements EMView<ClaimsList> {
 	
 	private ArrayAdapter<Claim> adapter;

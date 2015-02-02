@@ -18,6 +18,13 @@
 
 package ca.ualberta.cs.expensemaster;
 
+/**
+ * Interface for objects that can be displayed in a
+ * two-level lists.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public interface SubtextListable {
 	public String getText();
 	public String getSubText();

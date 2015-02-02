@@ -18,6 +18,13 @@
 
 package ca.ualberta.cs.expensemaster;
 
+/**
+ * View for a Model-View pattern
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ * @param <T>
+ */
 public interface EMView<T> {
 	
 	void update(T model);

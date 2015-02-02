@@ -24,6 +24,12 @@ import java.util.List;
 
 import android.util.JsonWriter;
 
+/**
+ * Serializer for saved data.
+ * 
+ * @author ItsTristan (Tristan Meleshko)
+ *
+ */
 public class JsonClaimExporter implements ClaimExporter {
 	private JsonWriter writer;
 	public JsonClaimExporter(Writer out) {
