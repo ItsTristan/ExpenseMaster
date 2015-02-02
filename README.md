@@ -16,8 +16,6 @@ It is designed to be simple, attractive, and easy-to-use, supporting the followi
 
 This project was made for CMPUT301 at the University of Alberta for the W15 term.
 
-A demo video is available in the /docs/ directory.
-
 ## Requirements
 The following libraries and components are needed to run the application. If a static reference to
 a library or component is included in the project, they are indicated by `(Included *location*)`
@@ -29,6 +27,10 @@ relative to the root.
 **A signed, compiled .apk file is available in the /bin/ folder as ExpenseMaster.apk.**
 
 This project was built in Eclipse Luna, compliant with JDK 1.8, and targets the Android SDK Level 17 (Android 4.2.2). See **Requirements** above for information about libraries and components that might not be included in the repository.
+
+## Documentation
+A demo video and a basic UML diagram is available in the /docs/ directory.
+All other docs are currently in the source code itself.
 
 ## License
 Please see the file called LICENSE.
