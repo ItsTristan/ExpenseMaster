@@ -16,6 +16,8 @@ It is designed to be simple, attractive, and easy-to-use, supporting the followi
 
 This project was made for CMPUT301 at the University of Alberta for the W15 term.
 
+A demo video is available in the /docs/ directory.
+
 ## Requirements
 The following libraries and components are needed to run the application. If a static reference to
 a library or component is included in the project, they are indicated by `(Included *location*)`
