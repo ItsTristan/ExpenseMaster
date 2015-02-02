@@ -92,10 +92,10 @@ Demonstration
 
 Submission
 ==========
-- [ ] git URL is properly formatted
+- [X] git URL is properly formatted
 - [X] Repository contains the compiled APK binary in the /bin/ directory
   * /bin/ExpenseMaster.apk
-- [ ] Directory and file structure is correctly organized
+- [X] Directory and file structure is correctly organized
   * Not sure if the /gen/ folder should go in there
 - [X] Documentation files appear in the /doc/ directory
 
